@@ -1,8 +1,12 @@
 using AcessoriosStoreAPI;
 using AcessoriosStoreAPI.Context;
+using AcessoriosStoreAPI.Models;
 using AcessoriosStoreAPI.Services;
 using AcessoriosStoreAPI.Utilities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +27,31 @@ builder.Services.AddTransient<IFileStorage, AzureFileStorage>();
 
 builder.Services.AddScoped<Capitalize>();
 builder.Services.AddScoped<AcessoriesValidations>();
+builder.Services.AddScoped<UsersValidations>();
+
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<StoreContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddAuthentication().AddJwtBearer(options =>
+{
+    options.MapInboundClaims = false;
+
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["jwtkey"]!)),
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("isadmin", policy => policy.RequireClaim("isadmin"));
+});
 
 var app = builder.Build();
 
