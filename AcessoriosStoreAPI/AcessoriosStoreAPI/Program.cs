@@ -1,6 +1,7 @@
 using AcessoriosStoreAPI;
 using AcessoriosStoreAPI.Context;
 using AcessoriosStoreAPI.Services;
+using AcessoriosStoreAPI.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -19,6 +20,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddTransient<IFileStorage, AzureFileStorage>();
+
+builder.Services.AddScoped<Capitalize>();
+builder.Services.AddScoped<AcessoriesValidations>();
 
 var app = builder.Build();
 

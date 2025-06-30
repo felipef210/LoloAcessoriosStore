@@ -69,7 +69,17 @@
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "AcessoriosStoreAPI.DTOs.AcessoryDTOs.AcessoryDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "AcessoriosStoreAPI.Controllers.AcessoriesController",

@@ -7,6 +7,7 @@ using AcessoriosStoreAPI.DTOs.AcessoryDTOs;
 using AcessoriosStoreAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
+using AcessoriosStoreAPI.Utilities;
 
 namespace AcessoriosStoreAPI.Controllers;
 
@@ -18,12 +19,14 @@ public class AcessoriesController : ControllerBase
     private readonly IMapper _mapper;
     private readonly string _container = "acessories";
     private readonly IFileStorage _fileStorage;
+    private readonly AcessoriesValidations _validations;
 
-    public AcessoriesController(StoreContext context, IMapper mapper, IFileStorage fileStorage)
+    public AcessoriesController(StoreContext context, IMapper mapper, IFileStorage fileStorage, AcessoriesValidations validations)
     {
         _context = context;
         _mapper = mapper;
         _fileStorage = fileStorage;
+        _validations = validations;
     }
 
     [HttpGet]
@@ -48,14 +51,23 @@ public class AcessoriesController : ControllerBase
                             .FirstOrDefaultAsync(a => a.Id == id);
 
         if (acessory is null)
-            return NotFound("Acessório não encontrado");
+            return NotFound("Acessório não encontrado.");
 
         return acessory;
     }
 
     [HttpPost]
-    public async Task<CreatedAtRouteResult> Post([FromForm] AcessoryCreationDTO acessoryCreationDTO)
+    public async Task<ActionResult<AcessoryDTO>> Post([FromForm] AcessoryCreationDTO acessoryCreationDTO)
     {
+        acessoryCreationDTO.Name = _validations.InputAcessoryFormat(acessoryCreationDTO.Name);
+        acessoryCreationDTO.Category = _validations.InputAcessoryFormat(acessoryCreationDTO.Category);
+
+        if (!_validations.IsValidPrice(acessoryCreationDTO.Price))
+            return BadRequest("Preço do acessório inválido.");
+
+        if (!_validations.IsValidCategory(acessoryCreationDTO.Category))
+            return BadRequest("Categoria não existe no contexto.");
+
         var acessory = _mapper.Map<Acessory>(acessoryCreationDTO);
         var folderName = acessory.Name;
 
@@ -80,7 +92,16 @@ public class AcessoriesController : ControllerBase
             .FirstOrDefaultAsync(a => a.Id == id);
 
         if (acessory is null)
-            return NotFound("Acessório não encontrado");
+            return NotFound("Acessório não encontrado.");
+
+        acessoryUpdateDTO.Name = _validations.InputAcessoryFormat(acessoryUpdateDTO.Name);
+        acessoryUpdateDTO.Category = _validations.InputAcessoryFormat(acessoryUpdateDTO.Category);
+
+        if (!_validations.IsValidPrice(acessoryUpdateDTO.Price))
+            return BadRequest("Preço do acessório inválido.");
+
+        if (!_validations.IsValidCategory(acessoryUpdateDTO.Category))
+            return BadRequest("Categoria não existe no contexto.");
 
         acessory = _mapper.Map(acessoryUpdateDTO, acessory);
         var folderName = acessory.Name;
@@ -93,13 +114,10 @@ public class AcessoriesController : ControllerBase
 
                 if (picture != null)
                 {
-                    // Deleta a imagem do Blob Storage
                     await _fileStorage.Delete(picture.Url, folderName, _container);
 
-                    // Remove do banco
                     _context.AcessoryPictures.Remove(picture);
 
-                    // Salva a nova imagem no mesmo lugar
                     var urls = await _fileStorage.Store(_container, folderName, acessoryUpdateDTO.Pictures);
                     foreach (var url in urls)
                     {
@@ -129,7 +147,7 @@ public class AcessoriesController : ControllerBase
             .FirstOrDefaultAsync(a => a.Id == id);
 
         if (acessory is null)
-            return NotFound("Acessório não encontrado");
+            return NotFound("Acessório não encontrado.");
 
         var folderName = acessory.Name;
 
