@@ -27,12 +27,17 @@ public class AcessoriesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<AcessoryDTO>>> Get()
+    public async Task<ActionResult<List<AcessoryDTO>>> Get(int page = 1, int pageSize = 12)
     {
-        var acessories = await _context.Acessories
-                                .ProjectTo<AcessoryDTO>(_mapper.ConfigurationProvider)
-                                .ToListAsync();
-        return acessories;
+        var query = _context.Acessories.AsQueryable();
+        var totalItems = await query.CountAsync();
+        var items = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ProjectTo<AcessoryDTO>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+
+        return items;
     }
 
     [HttpGet("acessory/{id}", Name = "GetAcessoryById")]

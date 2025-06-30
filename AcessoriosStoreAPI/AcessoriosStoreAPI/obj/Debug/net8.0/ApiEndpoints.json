@@ -6,7 +6,18 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": [
       {
         "Type": "System.Collections.Generic.List\u00601[[AcessoriosStoreAPI.DTOs.AcessoryDTOs.AcessoryDTO, AcessoriosStoreAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
@@ -151,6 +162,7 @@
         ],
         "StatusCode": 200
       }
-    ]
+    ],
+    "EndpointName": "GetAcessoryById"
   }
 ]

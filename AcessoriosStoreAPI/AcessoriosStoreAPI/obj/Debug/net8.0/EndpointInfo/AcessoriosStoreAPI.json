@@ -10,6 +10,26 @@
         "tags": [
           "Acessories"
         ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 12
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -120,6 +140,7 @@
         "tags": [
           "Acessories"
         ],
+        "operationId": "GetAcessoryById",
         "parameters": [
           {
             "name": "id",
