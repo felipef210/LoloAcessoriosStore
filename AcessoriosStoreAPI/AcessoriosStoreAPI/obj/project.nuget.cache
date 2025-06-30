@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "IYmUKsVtENc=",
+  "dgSpecHash": "5HR0KVTNOYg=",
   "success": true,
   "projectFilePath": "D:\\Estudos Programação\\projetos\\LoloAcessoriosStore\\AcessoriosStoreAPI\\AcessoriosStoreAPI\\AcessoriosStoreAPI.csproj",
   "expectedPackageFiles": [
@@ -52,6 +52,7 @@
     "C:\\Users\\Felipe\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\8.0.0\\npgsql.entityframeworkcore.postgresql.8.0.0.nupkg.sha512",
     "C:\\Users\\Felipe\\.nuget\\packages\\npgsql.nettopologysuite\\8.0.0\\npgsql.nettopologysuite.8.0.0.nupkg.sha512",
     "C:\\Users\\Felipe\\.nuget\\packages\\swashbuckle.aspnetcore\\6.6.2\\swashbuckle.aspnetcore.6.6.2.nupkg.sha512",
+    "C:\\Users\\Felipe\\.nuget\\packages\\swashbuckle.aspnetcore.annotations\\6.6.2\\swashbuckle.aspnetcore.annotations.6.6.2.nupkg.sha512",
     "C:\\Users\\Felipe\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.6.2\\swashbuckle.aspnetcore.swagger.6.6.2.nupkg.sha512",
     "C:\\Users\\Felipe\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.6.2\\swashbuckle.aspnetcore.swaggergen.6.6.2.nupkg.sha512",
     "C:\\Users\\Felipe\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.6.2\\swashbuckle.aspnetcore.swaggerui.6.6.2.nupkg.sha512",
