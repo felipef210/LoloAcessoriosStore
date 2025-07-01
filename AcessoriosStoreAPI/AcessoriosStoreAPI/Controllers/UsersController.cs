@@ -20,7 +20,7 @@ namespace AcessoriosStoreAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isadmin")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class UsersController : ControllerBase
 {
     private readonly StoreContext _context;
@@ -41,6 +41,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isadmin")]
     public async Task<ActionResult<List<UserDTO>>> GetUsers([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
         var query = _context.Users.AsQueryable();
@@ -54,21 +55,39 @@ public class UsersController : ControllerBase
         return items;
     }
 
+    [HttpGet("admin/getuser/{email}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isadmin")]
+    public async Task<ActionResult<UserProfileDTO>> GetProfile(string email)
+    {
+        return await GetUserProfile(email);
+    }
+
+    [HttpGet("getuser")]
+    public async Task<ActionResult<UserProfileDTO>> GetOwnProfile()
+    {
+        var emailUsuarioLogado = User.FindFirstValue("email");
+
+        if (string.IsNullOrEmpty(emailUsuarioLogado))
+            return Unauthorized("Token inválido ou expirado.");
+
+        return await GetUserProfile(emailUsuarioLogado);
+    }
+
     [HttpPost("register")]
     [AllowAnonymous]
     public async Task<ActionResult<AuthenticationResponseDTO>> Register([FromBody] UserCreationDTO userCreationDTO)
     {
         if (_context.Users.Any(u => u.Email == userCreationDTO.Email))
-            return BadRequest("E-mail já cadastrado.");
+            return ValidationProblem("E-mail já cadastrado.");
 
         if (!_usersValidations.IsPasswordValid(userCreationDTO.Password))
-            return BadRequest("A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, um número e um caractere especial.");
+            return ValidationProblem("A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, um número e um caractere especial.");
 
         if (!_usersValidations.IsFullName(userCreationDTO.Name))
-            return BadRequest("Digite o seu nome completo.");
+            return ValidationProblem("Digite o seu nome completo.");
 
         if (!_usersValidations.GenderValidation(userCreationDTO.Gender))
-            return BadRequest("Opção inválida, favor selecione uma das opções disponíveis.");
+            return ValidationProblem("Opção inválida, favor selecione uma das opções disponíveis.");
 
         userCreationDTO.Name = _usersValidations.CapitalizeFullName(userCreationDTO.Name);
         userCreationDTO.Gender = _usersValidations.CapitalizeFirstLetter(userCreationDTO.Gender);
@@ -101,6 +120,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("makeadmin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isadmin")]
     public async Task<IActionResult> MakeAdmin([FromBody] EditClaimDTO editClaimDTO)
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == editClaimDTO.Email);
@@ -117,6 +137,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("removeadmin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isadmin")]
     public async Task<IActionResult> RemoveAdmin([FromBody] EditClaimDTO editClaimDTO)
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == editClaimDTO.Email);
@@ -145,6 +166,18 @@ public class UsersController : ControllerBase
 
         else if (!user.IsAdmin && hasAdminClaim)
             await _userManager.RemoveClaimAsync(identityUser!, new Claim("isadmin", "true"));
+    }
+
+    private async Task<ActionResult<UserProfileDTO>> GetUserProfile(string email)
+    {
+        var user = await _context.Users
+            .ProjectTo<UserProfileDTO>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync(u => u.Email == email);
+
+        if (user == null)
+            return NotFound("Usuário não encontrado");
+
+        return user;
     }
 
     private IEnumerable<IdentityError> BuildIncorrectLoginErrorMessage()

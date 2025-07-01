@@ -208,6 +208,52 @@
   },
   {
     "ContainingType": "AcessoriosStoreAPI.Controllers.UsersController",
+    "Method": "GetProfile",
+    "RelativePath": "api/Users/admin/getuser/{email}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "AcessoriosStoreAPI.DTOs.UserDTOs.UserProfileDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "AcessoriosStoreAPI.Controllers.UsersController",
+    "Method": "GetOwnProfile",
+    "RelativePath": "api/Users/getuser",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "AcessoriosStoreAPI.DTOs.UserDTOs.UserProfileDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "AcessoriosStoreAPI.Controllers.UsersController",
     "Method": "Login",
     "RelativePath": "api/Users/login",
     "HttpMethod": "POST",

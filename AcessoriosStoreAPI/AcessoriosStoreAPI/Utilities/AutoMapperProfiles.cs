@@ -30,5 +30,6 @@ public class AutoMapperProfiles : Profile
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
 
         CreateMap<User, UserDTO>();
+        CreateMap<User, UserProfileDTO>();
     }
 }
