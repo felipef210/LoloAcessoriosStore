@@ -152,7 +152,7 @@
         }
       }
     },
-    "/api/Acessories/acessory/{id}": {
+    "/api/Acessories/{id}": {
       "get": {
         "tags": [
           "Acessories"
@@ -191,9 +191,7 @@
             }
           }
         }
-      }
-    },
-    "/api/Acessories/{id}": {
+      },
       "put": {
         "tags": [
           "Acessories"

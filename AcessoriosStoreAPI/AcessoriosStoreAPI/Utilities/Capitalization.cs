@@ -1,6 +1,6 @@
 ﻿namespace AcessoriosStoreAPI.Utilities;
 
-public class Capitalize
+public class Capitalization : ICapitalize
 {
     public string CapitalizeFirstLetter(string input)
     {
@@ -10,7 +10,6 @@ public class Capitalize
         input = input.ToLower();
         return char.ToUpper(input[0]) + input.Substring(1);
     }
-
 
     public string CapitalizeFullName(string fullName)
     {
@@ -24,7 +23,6 @@ public class Capitalize
             .Split(' ', StringSplitOptions.RemoveEmptyEntries)
             .Select((word, index) =>
             {
-                // Always keep the first word capitalized, even being a preposition.
                 if (index == 0 || !lowercaseWords.Contains(word))
                     return char.ToUpper(word[0]) + word.Substring(1);
                 else

@@ -83,6 +83,33 @@
   },
   {
     "ContainingType": "AcessoriosStoreAPI.Controllers.AcessoriesController",
+    "Method": "GetAcessory",
+    "RelativePath": "api/Acessories/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "AcessoriosStoreAPI.DTOs.AcessoryDTOs.AcessoryDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "EndpointName": "GetAcessoryById"
+  },
+  {
+    "ContainingType": "AcessoriosStoreAPI.Controllers.AcessoriesController",
     "Method": "Put",
     "RelativePath": "api/Acessories/{id}",
     "HttpMethod": "PUT",
@@ -147,33 +174,6 @@
       }
     ],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "AcessoriosStoreAPI.Controllers.AcessoriesController",
-    "Method": "GetAcessory",
-    "RelativePath": "api/Acessories/acessory/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "AcessoriosStoreAPI.DTOs.AcessoryDTOs.AcessoryDTO",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ],
-    "EndpointName": "GetAcessoryById"
   },
   {
     "ContainingType": "AcessoriosStoreAPI.Controllers.UsersController",

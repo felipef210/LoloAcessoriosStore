@@ -1,35 +1,37 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using AcessoriosStoreAPI.Context;
-using AutoMapper;
-using AcessoriosStoreAPI.Models;
+﻿using AcessoriosStoreAPI.Context;
 using AcessoriosStoreAPI.DTOs.AcessoryDTOs;
+using AcessoriosStoreAPI.Models;
 using AcessoriosStoreAPI.Services;
-using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using AcessoriosStoreAPI.Utilities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AcessoriosStoreAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isadmin")]
 public class AcessoriesController : ControllerBase
 {
     private readonly StoreContext _context;
     private readonly IMapper _mapper;
     private readonly string _container = "acessories";
     private readonly IFileStorage _fileStorage;
-    private readonly AcessoriesValidations _validations;
+    private readonly AcessoryService _acessoryService;
 
-    public AcessoriesController(StoreContext context, IMapper mapper, IFileStorage fileStorage, AcessoriesValidations validations)
+    public AcessoriesController(StoreContext context, IMapper mapper, IFileStorage fileStorage, AcessoryService acessoryService)
     {
         _context = context;
         _mapper = mapper;
         _fileStorage = fileStorage;
-        _validations = validations;
+        _acessoryService = acessoryService;
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<List<AcessoryDTO>>> Get(int page = 1, int pageSize = 12)
     {
         var query = _context.Acessories.AsQueryable();
@@ -43,7 +45,8 @@ public class AcessoriesController : ControllerBase
         return items;
     }
 
-    [HttpGet("acessory/{id}", Name = "GetAcessoryById")]
+    [HttpGet("{id}", Name = "GetAcessoryById")]
+    [AllowAnonymous]
     public async Task<ActionResult<AcessoryDTO>> GetAcessory(int id)
     {
         var acessory = await _context.Acessories
@@ -59,13 +62,13 @@ public class AcessoriesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<AcessoryDTO>> Post([FromForm] AcessoryCreationDTO acessoryCreationDTO)
     {
-        acessoryCreationDTO.Name = _validations.InputAcessoryFormat(acessoryCreationDTO.Name);
-        acessoryCreationDTO.Category = _validations.InputAcessoryFormat(acessoryCreationDTO.Category);
+        acessoryCreationDTO.Name = _acessoryService.CapitalizeFirstLetter(acessoryCreationDTO.Name);
+        acessoryCreationDTO.Category = _acessoryService.CapitalizeFirstLetter(acessoryCreationDTO.Category);
 
-        if (!_validations.IsValidPrice(acessoryCreationDTO.Price))
+        if (!_acessoryService.IsValidPrice(acessoryCreationDTO.Price))
             return BadRequest("Preço do acessório inválido.");
 
-        if (!_validations.IsValidCategory(acessoryCreationDTO.Category))
+        if (!_acessoryService.IsValidCategory(acessoryCreationDTO.Category))
             return BadRequest("Categoria não existe no contexto.");
 
         var acessory = _mapper.Map<Acessory>(acessoryCreationDTO);
@@ -94,13 +97,13 @@ public class AcessoriesController : ControllerBase
         if (acessory is null)
             return NotFound("Acessório não encontrado.");
 
-        acessoryUpdateDTO.Name = _validations.InputAcessoryFormat(acessoryUpdateDTO.Name);
-        acessoryUpdateDTO.Category = _validations.InputAcessoryFormat(acessoryUpdateDTO.Category);
+        acessoryUpdateDTO.Name = _acessoryService.CapitalizeFirstLetter(acessoryUpdateDTO.Name);
+        acessoryUpdateDTO.Category = _acessoryService.CapitalizeFirstLetter(acessoryUpdateDTO.Category);
 
-        if (!_validations.IsValidPrice(acessoryUpdateDTO.Price))
+        if (!_acessoryService.IsValidPrice(acessoryUpdateDTO.Price))
             return BadRequest("Preço do acessório inválido.");
 
-        if (!_validations.IsValidCategory(acessoryUpdateDTO.Category))
+        if (!_acessoryService.IsValidCategory(acessoryUpdateDTO.Category))
             return BadRequest("Categoria não existe no contexto.");
 
         acessory = _mapper.Map(acessoryUpdateDTO, acessory);

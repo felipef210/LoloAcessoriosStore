@@ -1,13 +1,15 @@
-﻿namespace AcessoriosStoreAPI.Utilities;
+﻿using AcessoriosStoreAPI.Utilities;
 
-public class AcessoriesValidations
+namespace AcessoriosStoreAPI.Services;
+
+public class AcessoryService
 {
-    private Capitalize _capitalize;
-    public AcessoriesValidations(Capitalize capitalize)
+    private readonly ICapitalize _capitalize;
+
+    public AcessoryService(ICapitalize capitalize)
     {
         _capitalize = capitalize;
     }
-
     public bool IsValidCategory(string categoryInput)
     {
         List<string> categories = new List<string> { "Anel", "Bracelete", "Brinco", "Colar", "Pulseira" };
@@ -22,15 +24,15 @@ public class AcessoriesValidations
 
     public bool IsValidPrice(double priceInput)
     {
-        if (priceInput < 0) 
+        if (priceInput < 0)
             return false;
 
         return true;
     }
 
-    public string InputAcessoryFormat(string nameInput)
+    public string CapitalizeFirstLetter(string acessoryNameInput)
     {
-        nameInput = _capitalize.CapitalizeFirstLetter(nameInput);
-        return nameInput;
+        acessoryNameInput = _capitalize.CapitalizeFirstLetter(acessoryNameInput);
+        return acessoryNameInput;
     }
 }

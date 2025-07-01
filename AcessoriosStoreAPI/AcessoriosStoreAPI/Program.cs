@@ -25,9 +25,9 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddTransient<IFileStorage, AzureFileStorage>();
 
-builder.Services.AddScoped<Capitalize>();
-builder.Services.AddScoped<AcessoriesValidations>();
-builder.Services.AddScoped<UsersValidations>();
+builder.Services.AddScoped<ICapitalize, Capitalization>();
+builder.Services.AddScoped<AcessoryService>();
+builder.Services.AddScoped<UserService>();
 
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<StoreContext>()
