@@ -2,6 +2,7 @@
 using AcessoriosStoreAPI.DTOs.AcessoryDTOs;
 using AcessoriosStoreAPI.Models;
 using AcessoriosStoreAPI.Services;
+using AcessoriosStoreAPI.Utilities;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -40,6 +41,7 @@ public class AcessoriesController : ControllerBase
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ProjectTo<AcessoryDTO>(_mapper.ConfigurationProvider)
+            .OrderByDescending(x => x.LastUpdate)
             .ToListAsync();
 
         return items;
@@ -57,6 +59,34 @@ public class AcessoriesController : ControllerBase
             return NotFound("Acessório não encontrado.");
 
         return acessory;
+    }
+
+    [HttpPost("filter")]
+    [AllowAnonymous]
+    public async Task<ActionResult<List<AcessoryDTO>>> Filter([FromBody] AcessoriesFilterDTO dto)
+    {
+        var query = _context.Acessories.AsQueryable();
+
+        if (!string.IsNullOrEmpty(dto.Name))
+            query = query.Where(a => a.Name.ToLower().Contains(dto.Name.ToLower()));
+
+        if (!string.IsNullOrEmpty(dto.Category) && dto.Category != "Todos os produtos")
+            query = query.Where(a => a.Category.ToLower().Contains(dto.Category.ToLower()));
+
+        if (string.IsNullOrEmpty(dto.OrderBy))
+            query = query.OrderByDescending(a => a.LastUpdate);
+
+        else if (dto.OrderBy.ToLower() == "lowerprice")
+            query = query.OrderBy(a => a.Price);
+
+        else if (dto.OrderBy.ToLower() == "higherprice")
+            query = query.OrderByDescending(a => a.Price);
+
+        var result = await query.Paginate()
+            .ProjectTo<AcessoryDTO>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+
+        return Ok(result);
     }
 
     [HttpPost]

@@ -1,4 +1,9 @@
-﻿using AcessoriosStoreAPI.Utilities;
+﻿using AcessoriosStoreAPI.Context;
+using AcessoriosStoreAPI.DTOs.AcessoryDTOs;
+using AcessoriosStoreAPI.Models;
+using AcessoriosStoreAPI.Utilities;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace AcessoriosStoreAPI.Services;
 
@@ -9,7 +14,7 @@ public class AcessoryService
     public AcessoryService(ICapitalize capitalize)
     {
         _capitalize = capitalize;
-    }
+    } 
     public bool IsValidCategory(string categoryInput)
     {
         List<string> categories = new List<string> { "Anel", "Bracelete", "Brinco", "Colar", "Pulseira" };

@@ -12,6 +12,18 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 var connString = builder.Configuration["PostgresConnection"];
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .WithExposedHeaders("total-records-count");
+    });
+});
+
 // Add services to the container.
 
 builder.Services.AddDbContext<StoreContext>(options => options.UseNpgsql(connString));
@@ -60,6 +72,8 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 
