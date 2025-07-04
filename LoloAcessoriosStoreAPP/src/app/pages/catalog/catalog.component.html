@@ -1,0 +1,24 @@
+<div class="container">
+  <header>
+    <app-header></app-header>
+  </header>
+
+  <section class="search">
+    <app-search (formChanged)="filter($event)"></app-search>
+    <h1>Catálogo</h1>
+  </section>
+
+  <section class="card-list">
+    @if (acessoryList) {
+      @for (acessory of acessoryList; track $index) {
+        <app-acessory-card [cardImage]="acessory.pictures[0]" [cardName]="acessory.name" [cardPrice]="acessory.price"></app-acessory-card>
+      }
+    }
+
+    @else {
+      <div class="noResults">
+        <h2>0 resultados encontrados.</h2>
+      </div>
+    }
+  </section>
+</div>

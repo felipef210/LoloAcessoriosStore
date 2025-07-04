@@ -1,0 +1,32 @@
+.card {
+  flex: 0 0 calc(30% - 1rem); // 4 cards por linha, considerando o gap
+  box-sizing: border-box;
+  background-color: white;
+  color: #9B70E8;
+  text-align: center;
+
+  img {
+    min-height: 400px;
+    max-height: 400px;
+    border-bottom: 1px solid black;
+    margin-bottom: -1rem;
+  }
+
+  h2 {
+    margin-bottom: -.8rem;
+    color: black;
+  }
+
+  .btn-section {
+    display: flex;
+    justify-content: center;
+
+    button {
+      background-color: #9B70E8;
+      color: white;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+  }
+
+}

@@ -1,0 +1,16 @@
+<form [formGroup]="form">
+  <ul class="categories">
+    @for (category of categories; track $index) {
+      <li [class.selected]="category === form.get('selectedCategory')?.value" (click)="selectCategory(category)"><a>{{ category }}</a></li>
+    }
+  </ul>
+  <input formControlName="search" type="text" placeholder="Digite aqui..." style="background-image: url('lupa.png');">
+  <br>
+  <span class="label">Ordenar por:</span>
+  <select formControlName="filterBy">
+    <option value="" selected>Escolha uma opção</option>
+    <option value="lowerPrice">Menor Preço</option>
+    <option value="higherPrice">Maior Preço</option>
+  </select>
+</form>
+

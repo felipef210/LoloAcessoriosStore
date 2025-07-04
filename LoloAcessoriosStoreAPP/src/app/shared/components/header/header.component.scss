@@ -1,0 +1,41 @@
+.toolbar {
+  padding: 2rem 3rem;
+  background-color: #F1F1F1;
+  padding-top: 3rem;
+
+  .spacer {
+    flex: 1 1 auto
+  }
+
+  .signIn-signUp {
+    text-decoration: none;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    width: 8rem;
+    color: #9B70E8;
+    margin-right: .2rem;
+    font-weight: bold;
+    font-size: .9rem;
+    cursor: pointer;
+
+    p {
+      line-height: 1.1;
+      margin-left: .3rem;
+    }
+
+    mat-icon {
+      margin-bottom: .1rem;
+    }
+  }
+
+  .btn-header {
+    color: #F1F1F1;
+    background: #9B70E8;
+    font-size: .9rem;
+  }
+
+  img {
+    scale: 1.5;
+  }
+}

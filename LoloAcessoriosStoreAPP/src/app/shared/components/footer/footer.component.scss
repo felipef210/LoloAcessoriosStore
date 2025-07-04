@@ -1,0 +1,94 @@
+footer {
+  width: 100%;
+  color: white;
+  padding-bottom: 1rem;
+  background-color: #9B70E8;
+}
+
+ul {
+  list-style: none;
+  display: inline-block;
+  display: flex;
+}
+
+li {
+  margin-right: 1rem;
+}
+
+li a {
+  font-size: 24px;
+  text-decoration: none;
+  background-color: white;
+  border: 2px solid black;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+li a i {
+  color: black;
+  transition: 0.5s;
+}
+
+li a:focus, li a:active {
+  color: #9B70E8;
+}
+
+img {
+  width: 6rem;
+}
+
+.secao {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.subsecao {
+  display: flex;
+  flex-basis: 20%;
+  justify-content: center;
+}
+
+.subsecao:not(:first-child) {
+  align-items: center;
+}
+
+.subsecao:not(:last-child) {
+  margin-right: 1rem;
+  flex-direction: column;
+}
+
+.subsecao:last-child {
+  align-items: center;
+}
+
+.secao-2 {
+  text-align: center;
+}
+
+.endereco {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 1rem;
+}
+
+.endereco span {
+  margin-left: 0.5rem;
+}
+
+/* Efeito ao passar o mouse */
+#instagram:hover a i {
+  color: #F9A8D4;
+}
+
+#whatsapp:hover a i {
+  color: #12b34f;
+}
+
+#tiktok:hover a i {
+  color: #69C9D0;
+}
+
+#maps:hover a i {
+  color: #0077B5;
+}

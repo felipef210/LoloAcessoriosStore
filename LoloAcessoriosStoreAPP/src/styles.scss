@@ -1,1 +1,22 @@
-/* You can add global styles to this file, and also import other style files */
+html, body { height: 100%; }
+body { margin: 0; padding: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.container {
+  background-color: #F1F1F1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.purple-icon, .white-icon {
+  scale: 1.5;
+}
+
+.white-icon {
+  color: #fff;
+}
+
+.purple-icon {
+  color: #9B70E8;
+}

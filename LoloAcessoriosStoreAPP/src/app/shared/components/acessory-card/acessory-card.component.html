@@ -1,0 +1,10 @@
+<mat-card class="card" appearance="outlined">
+  <img mat-card-image [src]="cardImage">
+  <mat-card-content>
+    <h2>{{ cardName }}</h2>
+    <h3>R${{ cardPrice | number:'1.2-2' }}</h3>
+  </mat-card-content>
+  <mat-card-actions class="btn-section">
+    <button matButton mat-flat-button>Detalhes</button>
+  </mat-card-actions>
+</mat-card>
