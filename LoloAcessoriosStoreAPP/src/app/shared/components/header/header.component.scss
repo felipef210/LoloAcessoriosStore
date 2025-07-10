@@ -39,3 +39,41 @@
     scale: 1.5;
   }
 }
+
+.mobile-toolbar {
+  display: none;
+}
+
+
+@media screen and (max-width: 768px) {
+  .mobile-toolbar {
+    display: flex;
+    background-color: #9B70E8;
+    align-items: center;
+
+
+      .spacer {
+      flex: 1 1 auto
+    }
+
+    .white-icon {
+      scale: 1.1;
+      background-color: #9B70E8;
+      border: none;
+    }
+
+    a {
+      .white-icon {
+        scale: 1.1;
+      }
+    }
+
+    a:not(:last-child) {
+      margin-right: 1rem;
+    }
+  }
+
+  .toolbar {
+    display: none;
+  }
+}

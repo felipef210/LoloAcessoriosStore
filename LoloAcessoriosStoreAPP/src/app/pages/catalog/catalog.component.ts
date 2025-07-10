@@ -13,11 +13,15 @@ import { AcessoryCardComponent } from '../../shared/components/acessory-card/ace
 })
 export class CatalogComponent {
   acessoryList!: AcessoryDTO[];
+  pages: number[] = [];
+  currentPage: number = 1;
+  itemsPerPage = 12;
 
   acessoryService = inject(AcessoryService);
 
   constructor() {
     this.getAcessories();
+
   }
 
   filter(values: FilterAcessoryDTO) {
@@ -26,9 +30,45 @@ export class CatalogComponent {
     });
   }
 
-  getAcessories() {
-    this.acessoryService.getLanding().subscribe((acessories) => {
-      this.acessoryList = acessories;
+  getAcessories(page: number = this.currentPage) {
+    this.acessoryService.getLanding(page).subscribe((response) => {
+      this.acessoryList = response.items;
+      this.currentPage = page;
+
+      const totalPages = Math.ceil(response.totalItems / this.itemsPerPage);
+      this.pages = Array.from({ length: totalPages }, (_, i) => i + 1);
     });
+  }
+
+  goToPage(page: number) {
+    this.getAcessories(page);
+  }
+
+  previousPage() {
+    if(this.currentPage > 1) {
+      this.currentPage = this.currentPage - 1;
+      this.getAcessories();
+    }
+
+    return;
+  }
+
+  nextPage() {
+    if(this.currentPage < this.pages[this.pages.length - 1]) {
+      this.currentPage = this.currentPage + 1;
+      this.getAcessories();
+    }
+
+    return;
+  }
+
+  firstPage() {
+    this.currentPage = 1;
+    this.getAcessories();
+  }
+
+  lastPage() {
+    this.currentPage = this.pages[this.pages.length - 1];
+    this.getAcessories();
   }
 }

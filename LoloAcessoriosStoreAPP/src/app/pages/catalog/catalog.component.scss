@@ -25,13 +25,58 @@
     gap: 2rem;
     margin-top: 2rem;
   }
+
+  .pages {
+    margin: 0 auto;
+
+    ul {
+      padding: 0;
+      list-style: none;
+
+      li {
+        cursor: pointer;
+        display: inline-block;
+        margin: 1rem 0;
+
+        a {
+          opacity: .4;
+        }
+
+        .active {
+          opacity: 1;
+          color: #9B70E8;
+          border-bottom: 1px solid #9B70E8;
+        }
+      }
+
+      li:not(:last-child) {
+        margin-right: .5rem;
+      }
+    }
+  }
 }
 
 @media screen and (max-width: 1368px) {
-  .container {
-    .card-list {
-      width: 100%;
+    .container {
+      .card-list {
+        width: 100%;
+    }
   }
+}
+
+@media (min-width: 1369px) and (max-width: 1688px) {
+  .container {
+      .card-list {
+        width: 80%;
+    }
+  }
+}
+
+@media (min-width: 1370px) and (max-width: 1477px) {
+  .container {
+      .card-list {
+        width: 90%;
+    }
   }
 }
 

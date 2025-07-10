@@ -55,3 +55,16 @@ form {
     }
 
 }
+
+@media screen and (max-width: 768px) {
+  .categories {
+    display: none;
+  }
+
+  form {
+    input {
+      width: 70%;
+      margin-top: 2rem;
+    }
+  }
+}
