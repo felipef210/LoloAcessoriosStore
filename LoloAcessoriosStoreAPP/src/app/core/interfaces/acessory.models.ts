@@ -19,5 +19,7 @@ export interface CreateAcessoryDTO {
 export interface FilterAcessoryDTO {
   name?: string,
   orderBy?: string,
-  category: string
+  category: string,
+  page: number,
+  recordsPerPage: number
 }

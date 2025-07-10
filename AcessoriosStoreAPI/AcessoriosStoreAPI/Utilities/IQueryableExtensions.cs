@@ -1,11 +1,13 @@
-﻿namespace AcessoriosStoreAPI.Utilities;
+﻿using AcessoriosStoreAPI.DTOs;
+
+namespace AcessoriosStoreAPI.Utilities;
 
 public static class IQueryableExtensions
 {
-    public static IQueryable<T> Paginate<T>(this IQueryable<T> queryable, int page = 1, int recordsPerPage = 12)
+    public static IQueryable<T> Paginate<T>(this IQueryable<T> queryable, PaginationDTO pagination)
     {
         return queryable
-            .Skip((page - 1) * recordsPerPage)
-            .Take(recordsPerPage);
+            .Skip((pagination.Page - 1) * pagination.RecordsPerPage)
+            .Take(pagination.RecordsPerPage);
     }
 }

@@ -8,19 +8,19 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "page",
+        "Name": "Page",
         "Type": "System.Int32",
         "IsRequired": false
       },
       {
-        "Name": "pageSize",
+        "Name": "RecordsPerPage",
         "Type": "System.Int32",
         "IsRequired": false
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "AcessoriosStoreAPI.DTOs.PaginatedDTO\u00601[[AcessoriosStoreAPI.DTOs.AcessoryDTOs.AcessoryDTO, AcessoriosStoreAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[AcessoriosStoreAPI.DTOs.AcessoryDTOs.AcessoryDTO, AcessoriosStoreAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -179,14 +179,34 @@
     "ContainingType": "AcessoriosStoreAPI.Controllers.AcessoriesController",
     "Method": "Filter",
     "RelativePath": "api/Acessories/filter",
-    "HttpMethod": "POST",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "dto",
-        "Type": "AcessoriosStoreAPI.DTOs.AcessoryDTOs.AcessoriesFilterDTO",
-        "IsRequired": true
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "OrderBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Category",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "RecordsPerPage",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [

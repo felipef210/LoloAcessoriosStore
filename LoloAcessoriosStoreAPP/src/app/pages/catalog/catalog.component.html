@@ -22,15 +22,12 @@
     }
   </section>
 
-  <section class="pages">
-    <ul>
-      <li (click)="firstPage()"><a><<</a></li>
-      <li><a (click)="previousPage()"><</a></li>
-      @for (page of pages; track $index) {
-        <li><a (click)="goToPage(page)" [class.active]="page === currentPage">{{ page }}</a></li>
-      }
-      <li (click)="nextPage()"><a>></a></li>
-      <li (click)="lastPage()"><a>>></a></li>
-    </ul>
+  <section class="pagination">
+    <app-pagination
+      [currentPage]="pagination.page"
+      [recordsPerPage]="pagination.recordsPerPage"
+      [totalRecords]="pagination.totalRecords || 0"
+      (pageChange)="onPageChange($event)">
+    </app-pagination>
   </section>
 </div>

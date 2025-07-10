@@ -4,18 +4,21 @@ import { HeaderComponent } from "../../shared/components/header/header.component
 import { SearchComponent } from "../../shared/components/search/search.component";
 import { AcessoryService } from '../../core/services/acessory.service';
 import { AcessoryCardComponent } from '../../shared/components/acessory-card/acessory-card.component';
+import { PaginationDTO } from '../../core/interfaces/paginationDTO';
+import { HttpResponse } from '@angular/common/http';
+import { PaginationComponent } from "../../shared/components/pagination/pagination.component";
 
 @Component({
   selector: 'app-catalog',
-  imports: [HeaderComponent, SearchComponent, AcessoryCardComponent],
+  imports: [HeaderComponent, SearchComponent, AcessoryCardComponent, PaginationComponent],
   templateUrl: './catalog.component.html',
   styleUrl: './catalog.component.scss'
 })
 export class CatalogComponent {
   acessoryList!: AcessoryDTO[];
-  pages: number[] = [];
-  currentPage: number = 1;
-  itemsPerPage = 12;
+  lastFilterUsed?: FilterAcessoryDTO;
+  pagination: PaginationDTO = {page: 1, recordsPerPage: 12};
+  totalRecordsCount!: number;
 
   acessoryService = inject(AcessoryService);
 
@@ -25,50 +28,35 @@ export class CatalogComponent {
   }
 
   filter(values: FilterAcessoryDTO) {
+    this.lastFilterUsed = values;
+    values.page = this.pagination.page;
+    values.recordsPerPage = this.pagination.recordsPerPage;
+
     this.acessoryService.filter(values).subscribe((response) => {
-      this.acessoryList = response;
+      this.acessoryList = response.body || [];
+
+      const total = response.headers.get('total-records-count');
+      this.pagination.totalRecords = total ? parseInt(total, 10) : 0;
     });
   }
 
-  getAcessories(page: number = this.currentPage) {
-    this.acessoryService.getLanding(page).subscribe((response) => {
-      this.acessoryList = response.items;
-      this.currentPage = page;
+  getAcessories() {
+    this.acessoryService.getLanding(this.pagination).subscribe((response: HttpResponse<AcessoryDTO[]>) => {
+      this.acessoryList = response.body as AcessoryDTO[];
+      const header = response.headers.get('total-records-count') as string;
+      const total = parseInt(header, 10);
 
-      const totalPages = Math.ceil(response.totalItems / this.itemsPerPage);
-      this.pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+      this.pagination.totalRecords = total;
     });
   }
 
-  goToPage(page: number) {
-    this.getAcessories(page);
-  }
+  onPageChange(newPage: number) {
+    this.pagination.page = newPage;
 
-  previousPage() {
-    if(this.currentPage > 1) {
-      this.currentPage = this.currentPage - 1;
+    if (this.lastFilterUsed)
+      this.filter(this.lastFilterUsed);
+
+    else
       this.getAcessories();
-    }
-
-    return;
-  }
-
-  nextPage() {
-    if(this.currentPage < this.pages[this.pages.length - 1]) {
-      this.currentPage = this.currentPage + 1;
-      this.getAcessories();
-    }
-
-    return;
-  }
-
-  firstPage() {
-    this.currentPage = 1;
-    this.getAcessories();
-  }
-
-  lastPage() {
-    this.currentPage = this.pages[this.pages.length - 1];
-    this.getAcessories();
   }
 }

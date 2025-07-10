@@ -1,0 +1,16 @@
+<div class="pages">
+  @if (totalPages > 1) {
+    <ul>
+      <li (click)="firstPage()"><a>&lt;&lt;</a></li>
+      <li (click)="previousPage()"><a>&lt;</a></li>
+      @for (page of pages; track $index) {
+        <li>
+          <a [class.active]="page === currentPage" (click)="goToPage(page)">{{ page }}</a>
+        </li>
+      }
+
+      <li (click)="nextPage()"><a>&gt;</a></li>
+      <li (click)="lastPage()"><a>&gt;&gt;</a></li>
+    </ul>
+  }
+</div>

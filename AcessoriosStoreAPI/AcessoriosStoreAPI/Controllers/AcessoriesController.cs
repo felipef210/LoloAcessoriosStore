@@ -34,24 +34,15 @@ public class AcessoriesController : ControllerBase
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<ActionResult<PaginatedDTO<AcessoryDTO>>> Get(int page = 1, int pageSize = 12)
+    public async Task<ActionResult<List<AcessoryDTO>>> Get([FromQuery] PaginationDTO pagination)
     {
         var query = _context.Acessories.AsQueryable();
-        var totalItems = await query.CountAsync();
-        var items = await query
-            .OrderByDescending(x => x.LastUpdate)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ProjectTo<AcessoryDTO>(_mapper.ConfigurationProvider)
-            .ToListAsync();
-
-        var response = new PaginatedDTO<AcessoryDTO>
-        {
-            Items = items,
-            TotalItems = totalItems
-        };
-
-        return Ok(response);
+        await HttpContext.InsertPaginationParametersInHeader(query);
+        return await query
+                    .OrderByDescending(a => a.LastUpdate)
+                    .Paginate(pagination)
+                    .ProjectTo<AcessoryDTO>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
     }
 
     [HttpGet("{id}", Name = "GetAcessoryById")]
@@ -68,9 +59,9 @@ public class AcessoriesController : ControllerBase
         return acessory;
     }
 
-    [HttpPost("filter")]
+    [HttpGet("filter")]
     [AllowAnonymous]
-    public async Task<ActionResult<List<AcessoryDTO>>> Filter([FromBody] AcessoriesFilterDTO dto)
+    public async Task<ActionResult<List<AcessoryDTO>>> Filter([FromQuery] AcessoriesFilterDTO dto)
     {
         var query = _context.Acessories.AsQueryable();
 
@@ -89,9 +80,12 @@ public class AcessoriesController : ControllerBase
         else if (dto.OrderBy.ToLower() == "higherprice")
             query = query.OrderByDescending(a => a.Price);
 
-        var result = await query.Paginate()
-            .ProjectTo<AcessoryDTO>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+        await HttpContext.InsertPaginationParametersInHeader(query);
+
+        var result = await query
+                            .Paginate(dto)
+                            .ProjectTo<AcessoryDTO>(_mapper.ConfigurationProvider)
+                            .ToListAsync();
 
         return Ok(result);
     }

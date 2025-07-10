@@ -12,21 +12,19 @@
         ],
         "parameters": [
           {
-            "name": "page",
+            "name": "Page",
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32",
-              "default": 1
+              "format": "int32"
             }
           },
           {
-            "name": "pageSize",
+            "name": "RecordsPerPage",
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32",
-              "default": 12
+              "format": "int32"
             }
           }
         ],
@@ -36,17 +34,26 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/AcessoryDTOPaginatedDTO"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AcessoryDTO"
+                  }
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AcessoryDTOPaginatedDTO"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AcessoryDTO"
+                  }
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AcessoryDTOPaginatedDTO"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AcessoryDTO"
+                  }
                 }
               }
             }
@@ -297,29 +304,49 @@
       }
     },
     "/api/Acessories/filter": {
-      "post": {
+      "get": {
         "tags": [
           "Acessories"
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AcessoriesFilterDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AcessoriesFilterDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/AcessoriesFilterDTO"
-              }
+        "parameters": [
+          {
+            "name": "Name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "OrderBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Category",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "RecordsPerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -640,24 +667,6 @@
   },
   "components": {
     "schemas": {
-      "AcessoriesFilterDTO": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "orderBy": {
-            "type": "string",
-            "nullable": true
-          },
-          "category": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "AcessoryDTO": {
         "required": [
           "category",
@@ -696,23 +705,6 @@
           "lastUpdate": {
             "type": "string",
             "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "AcessoryDTOPaginatedDTO": {
-        "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AcessoryDTO"
-            },
-            "nullable": true
-          },
-          "totalItems": {
-            "type": "integer",
-            "format": "int32"
           }
         },
         "additionalProperties": false
