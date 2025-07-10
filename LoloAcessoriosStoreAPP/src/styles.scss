@@ -6,8 +6,8 @@ body { margin: 0; padding: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  margin: 0;
 }
+
 
 .purple-icon, .white-icon {
   scale: 1.5;
@@ -21,31 +21,34 @@ body { margin: 0; padding: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
   color: #9B70E8;
 }
 
-.pagination {
-  margin: 0 auto;
-  .pages {
-    ul {
-      padding: 0;
-      list-style: none;
+main {
+  flex: 1;
+  .pagination {
+    text-align: center;
+    .pages {
+      ul {
+        padding: 0;
+        list-style: none;
 
-      li {
-        cursor: pointer;
-        display: inline-block;
-        margin: 1rem 0;
+        li {
+          cursor: pointer;
+          display: inline-block;
+          margin: 1rem 0;
 
-        a {
-          opacity: .4;
+          a {
+            opacity: .4;
+          }
+
+          .active {
+            opacity: 1;
+            color: #9B70E8;
+            border-bottom: 1px solid #9B70E8;
+          }
         }
 
-        .active {
-          opacity: 1;
-          color: #9B70E8;
-          border-bottom: 1px solid #9B70E8;
+        li:not(:last-child) {
+          margin-right: .5rem;
         }
-      }
-
-      li:not(:last-child) {
-        margin-right: .5rem;
       }
     }
   }

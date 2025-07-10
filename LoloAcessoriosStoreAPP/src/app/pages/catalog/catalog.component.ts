@@ -7,10 +7,11 @@ import { AcessoryCardComponent } from '../../shared/components/acessory-card/ace
 import { PaginationDTO } from '../../core/interfaces/paginationDTO';
 import { HttpResponse } from '@angular/common/http';
 import { PaginationComponent } from "../../shared/components/pagination/pagination.component";
+import { FooterComponent } from "../../shared/components/footer/footer.component";
 
 @Component({
   selector: 'app-catalog',
-  imports: [HeaderComponent, SearchComponent, AcessoryCardComponent, PaginationComponent],
+  imports: [HeaderComponent, SearchComponent, AcessoryCardComponent, PaginationComponent, FooterComponent],
   templateUrl: './catalog.component.html',
   styleUrl: './catalog.component.scss'
 })

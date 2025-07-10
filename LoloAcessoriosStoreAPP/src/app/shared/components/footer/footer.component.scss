@@ -3,92 +3,109 @@ footer {
   color: white;
   padding-bottom: 1rem;
   background-color: #9B70E8;
-}
 
-ul {
-  list-style: none;
-  display: inline-block;
-  display: flex;
-}
+  .secao {
+    display: flex;
+    justify-content: space-evenly;
 
-li {
-  margin-right: 1rem;
-}
+    .subsecao {
+      display: flex;
+      flex-basis: 20%;
+      justify-content: center;
 
-li a {
-  font-size: 24px;
-  text-decoration: none;
-  background-color: white;
-  border: 2px solid black;
-  padding: 0.2rem 0.5rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-}
+      &:first-child {
+        justify-content: space-around;
+      }
 
-li a i {
-  color: black;
-  transition: 0.5s;
-}
+      &:not(:first-child) {
+        align-items: center;
+      }
 
-li a:focus, li a:active {
-  color: #9B70E8;
-}
+      &:not(:last-child) {
+        margin-right: 1rem;
+        flex-direction: column;
+      }
 
-img {
-  width: 6rem;
-}
+      &:last-child {
+        align-items: center;
+      }
 
-.secao {
-  display: flex;
-  justify-content: space-evenly;
-}
+      ul {
+        list-style: none;
+        display: flex;
 
-.subsecao {
-  display: flex;
-  flex-basis: 20%;
-  justify-content: center;
-}
+        li {
+          margin-right: 1rem;
 
-.subsecao:not(:first-child) {
-  align-items: center;
-}
+          a {
+            font-size: 24px;
+            text-decoration: none;
+            background-color: white;
+            border: 2px solid black;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
 
-.subsecao:not(:last-child) {
-  margin-right: 1rem;
-  flex-direction: column;
-}
+            i {
+              color: black;
+              transition: 0.5s;
+            }
 
-.subsecao:last-child {
-  align-items: center;
-}
+            &:focus,
+            &:active {
+              color: #9B70E8;
+            }
+          }
+        }
 
-.secao-2 {
-  text-align: center;
-}
+        // Hover effects
+        #instagram:hover a i {
+          color: #F9A8D4;
+        }
 
-.endereco {
-  display: flex;
-  align-items: baseline;
-  margin-bottom: 1rem;
-}
+        #whatsapp:hover a i {
+          color: #12b34f;
+        }
 
-.endereco span {
-  margin-left: 0.5rem;
-}
+        #tiktok:hover a i {
+          color: #69C9D0;
+        }
 
-/* Efeito ao passar o mouse */
-#instagram:hover a i {
-  color: #F9A8D4;
-}
+        #maps:hover a i {
+          color: #0077B5;
+        }
+      }
+    }
 
-#whatsapp:hover a i {
-  color: #12b34f;
-}
+    figure.subsecao {
+      img {
+        width: 6rem;
+      }
+    }
 
-#tiktok:hover a i {
-  color: #69C9D0;
-}
+    .endereco {
+      display: flex;
+      align-items: baseline;
+      margin-bottom: 1rem;
 
-#maps:hover a i {
-  color: #0077B5;
+      span {
+        margin-left: 0.5rem;
+      }
+    }
+
+    span {
+      &:first-child {
+        margin: 1.5rem 0;
+        a {
+          text-decoration: none;
+          color: white;
+          margin-left: .5rem;
+        }
+      }
+    }
+  }
+
+  .secao-2 {
+    text-align: center;
+  }
 }
