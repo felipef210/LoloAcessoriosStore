@@ -21,8 +21,8 @@ export class AcessoryService {
     return this.http.get<AcessoryDTO[]>(this.url, {params: queryParams, observe: 'response'});
   }
 
-  public filter(value: FilterAcessoryDTO): Observable<HttpResponse<AcessoryDTO[]>> {
-    const queryParams = buildQueryParams(value);
+  public filter(filters: FilterAcessoryDTO, pagination: PaginationDTO): Observable<HttpResponse<AcessoryDTO[]>> {
+    const queryParams = buildQueryParams({...filters, ...pagination});
     return this.http.get<AcessoryDTO[]>(`${this.url}/filter`, {
       params: queryParams,
       observe: 'response'

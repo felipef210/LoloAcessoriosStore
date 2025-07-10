@@ -16,7 +16,7 @@ import { PaginationComponent } from "../../shared/components/pagination/paginati
 })
 export class CatalogComponent {
   acessoryList!: AcessoryDTO[];
-  lastFilterUsed?: FilterAcessoryDTO;
+  filterValues!: FilterAcessoryDTO;
   pagination: PaginationDTO = {page: 1, recordsPerPage: 12};
   totalRecordsCount!: number;
 
@@ -27,12 +27,16 @@ export class CatalogComponent {
 
   }
 
+  // When occur changes on filter fields this function is called. The mains reason is to always reset the page when some change happen.
   filter(values: FilterAcessoryDTO) {
-    this.lastFilterUsed = values;
-    values.page = this.pagination.page;
-    values.recordsPerPage = this.pagination.recordsPerPage;
+    this.filterValues = values;
+    this.pagination.page = 1;
+    this.loadFilteredAcessories();
+  }
 
-    this.acessoryService.filter(values).subscribe((response) => {
+  // This function actualy loads all the filtered content.
+  loadFilteredAcessories() {
+    this.acessoryService.filter(this.filterValues, this.pagination).subscribe((response) => {
       this.acessoryList = response.body || [];
 
       const total = response.headers.get('total-records-count');
@@ -50,11 +54,19 @@ export class CatalogComponent {
     });
   }
 
+  /*
+    And then there is the main reason to exist 2 functions to load filtered content. The
+    page can be changed when I come to this function, if I had all the code of both
+    filter and loadFiltered functions the page would always be reseted to 1 and ignore
+    the parameter "newPage" because it would conflict with "this.pagination.page = newPage"
+    and "this.pagination.page = 1" from filter function.
+  */
+
   onPageChange(newPage: number) {
     this.pagination.page = newPage;
 
-    if (this.lastFilterUsed)
-      this.filter(this.lastFilterUsed);
+    if (this.filterValues)
+      this.loadFilteredAcessories();
 
     else
       this.getAcessories();

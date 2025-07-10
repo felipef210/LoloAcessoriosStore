@@ -1,13 +1,17 @@
 import { HttpParams } from "@angular/common/http";
 
-export function buildQueryParams(obj: any): HttpParams {
-  let queryParams = new HttpParams();
+export function buildQueryParams(obj: Record<string, any>): HttpParams {
+  let params = new HttpParams();
 
-  for (let key in obj) {
-    if (obj[key] !== undefined && obj[key] !== null && obj[key] !== '') {
-      queryParams = queryParams.append(key, obj[key]);
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const value = obj[key];
+
+      if (value !== null && value !== undefined && value !== '') {
+        params = params.append(key, value.toString());
+      }
     }
   }
 
-  return queryParams;
+  return params;
 }

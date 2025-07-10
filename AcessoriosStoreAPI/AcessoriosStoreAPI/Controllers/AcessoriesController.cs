@@ -61,29 +61,29 @@ public class AcessoriesController : ControllerBase
 
     [HttpGet("filter")]
     [AllowAnonymous]
-    public async Task<ActionResult<List<AcessoryDTO>>> Filter([FromQuery] AcessoriesFilterDTO dto)
+    public async Task<ActionResult<List<AcessoryDTO>>> Filter([FromQuery] AcessoriesFilterDTO filter, [FromQuery] PaginationDTO pagination)
     {
         var query = _context.Acessories.AsQueryable();
 
-        if (!string.IsNullOrEmpty(dto.Name))
-            query = query.Where(a => a.Name.ToLower().Contains(dto.Name.ToLower()));
+        if (!string.IsNullOrEmpty(filter.Name))
+            query = query.Where(a => a.Name.ToLower().Contains(filter.Name.ToLower()));
 
-        if (!string.IsNullOrEmpty(dto.Category) && dto.Category != "Todos os produtos")
-            query = query.Where(a => a.Category.ToLower().Contains(dto.Category.ToLower()));
+        if (!string.IsNullOrEmpty(filter.Category) && filter.Category != "Todos os produtos")
+            query = query.Where(a => a.Category.ToLower().Contains(filter.Category.ToLower()));
 
-        if (string.IsNullOrEmpty(dto.OrderBy))
+        if (string.IsNullOrEmpty(filter.OrderBy))
             query = query.OrderByDescending(a => a.LastUpdate);
 
-        else if (dto.OrderBy.ToLower() == "lowerprice")
+        else if (filter.OrderBy.ToLower() == "lowerprice")
             query = query.OrderBy(a => a.Price);
 
-        else if (dto.OrderBy.ToLower() == "higherprice")
+        else if (filter.OrderBy.ToLower() == "higherprice")
             query = query.OrderByDescending(a => a.Price);
 
         await HttpContext.InsertPaginationParametersInHeader(query);
 
         var result = await query
-                            .Paginate(dto)
+                            .Paginate(pagination)
                             .ProjectTo<AcessoryDTO>(_mapper.ConfigurationProvider)
                             .ToListAsync();
 

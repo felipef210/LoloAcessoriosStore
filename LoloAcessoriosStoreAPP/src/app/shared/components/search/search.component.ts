@@ -31,9 +31,7 @@ export class SearchComponent {
       this.formChanged.emit({
         name: values.search ?? '',
         orderBy: values.filterBy ?? '',
-        category: singularCategory,
-        page: 1,
-        recordsPerPage: 12
+        category: singularCategory
       });
     });
   }

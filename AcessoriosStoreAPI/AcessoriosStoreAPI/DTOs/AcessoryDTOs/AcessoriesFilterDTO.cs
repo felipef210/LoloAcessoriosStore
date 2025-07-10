@@ -1,6 +1,6 @@
 ﻿namespace AcessoriosStoreAPI.DTOs.AcessoryDTOs;
 
-public class AcessoriesFilterDTO : PaginationDTO
+public class AcessoriesFilterDTO
 {
     public string? Name { get; set; }
     public string? OrderBy { get; set; }
