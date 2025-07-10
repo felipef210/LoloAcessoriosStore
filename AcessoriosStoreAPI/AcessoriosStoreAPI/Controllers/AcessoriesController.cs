@@ -1,4 +1,5 @@
 ﻿using AcessoriosStoreAPI.Context;
+using AcessoriosStoreAPI.DTOs;
 using AcessoriosStoreAPI.DTOs.AcessoryDTOs;
 using AcessoriosStoreAPI.Models;
 using AcessoriosStoreAPI.Services;
@@ -33,18 +34,24 @@ public class AcessoriesController : ControllerBase
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<ActionResult<List<AcessoryDTO>>> Get(int page = 1, int pageSize = 12)
+    public async Task<ActionResult<PaginatedDTO<AcessoryDTO>>> Get(int page = 1, int pageSize = 12)
     {
         var query = _context.Acessories.AsQueryable();
         var totalItems = await query.CountAsync();
         var items = await query
+            .OrderByDescending(x => x.LastUpdate)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ProjectTo<AcessoryDTO>(_mapper.ConfigurationProvider)
-            .OrderByDescending(x => x.LastUpdate)
             .ToListAsync();
 
-        return items;
+        var response = new PaginatedDTO<AcessoryDTO>
+        {
+            Items = items,
+            TotalItems = totalItems
+        };
+
+        return Ok(response);
     }
 
     [HttpGet("{id}", Name = "GetAcessoryById")]
