@@ -1,0 +1,85 @@
+h2 {
+  margin-top: -1.5rem;
+  font-size: 42px;
+  color: #9B70E8;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icon {
+  color: #9B70E8;
+}
+
+.custom-field {
+  margin-bottom: 1.5rem;
+  width: 400px;
+}
+
+.custom-field.mat-focused .icon {
+  color: #2E2C2C;
+}
+
+.custom-field:hover .icon {
+  color: #2E2C2C;
+}
+
+.custom-field:hover .passButton {
+  color: #2E2C2C !important;
+}
+
+.mat-datepicker-toggle-default-icon {
+  color: #9B70E8;
+}
+
+.custom-field:hover .mat-datepicker-toggle-default-icon {
+  color: #2E2C2C !important;
+}
+
+.custom-field.mat-focused .mat-datepicker-toggle-default-icon {
+  color: #2E2C2C !important;
+}
+
+.mat-select-value {
+  color: #9B70E8;
+}
+
+.passButton {
+  cursor: pointer;
+  color: #9B70E8 !important;
+  border: none;
+  margin-right: .3rem;
+}
+
+.btnRegister {
+  background-color: #9B70E8 !important;
+  color: white !important;
+  text-transform: uppercase !important;
+  border-radius: 2rem !important;
+  width: 400px;
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: gray !important;
+  }
+}
+
+.btnLogin {
+  background-color: #9B70E8 !important;
+  color: white !important;
+  text-transform: uppercase !important;
+  border-radius: 2rem !important;
+  width: 400px;
+}
+
+.registerRedirect {
+  margin-top: 1rem;
+  a {
+    text-decoration: none;
+    color: #9B70E8;
+  }
+}
+

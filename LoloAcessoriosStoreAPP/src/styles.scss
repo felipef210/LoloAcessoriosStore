@@ -1,3 +1,44 @@
+@use '@angular/material' as mat;
+@import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+:root {
+  @include mat.datepicker-overrides((
+   calendar-navigation-button-icon-color: #2E2C2C,
+   calendar-body-label-text-color: #2E2C2C,
+   toggle-active-state-icon-color: #9B70E8,
+   calendar-container-background-color: white,
+   calendar-date-text-color: #2E2C2C,
+   calendar-header-text-color: #2E2C2C,
+   calendar-period-button-text-color: #2E2C2C,
+   calendar-period-button-icon-color: #2E2C2C,
+   calendar-date-hover-state-background-color: #9B70E8,
+   calendar-date-selected-state-background-color: #9B70E8,
+   calendar-date-today-selected-state-outline-color: #9B70E8,
+   calendar-date-selected-state-text-color: white,
+   calendar-date-today-outline-color: #9B70E8
+  ));
+
+  @include mat.form-field-overrides((
+    outlined-input-text-color: #2E2C2C,
+    outlined-label-text-color: #9B70E8,
+    outlined-outline-color: #9B70E8,
+    outlined-focus-label-text-color: #2E2C2C,
+    outlined-focus-outline-color: #2E2C2C,
+    outlined-hover-label-text-color: #2E2C2C,
+    outlined-hover-outline-color: #2E2C2C,
+    outlined-input-text-placeholder-color: #2E2C2C,
+    outlined-caret-color: #2E2C2C
+  ));
+
+  @include mat.select-overrides((
+    panel-background-color: white,
+    enabled-trigger-text-color: #2E2C2C,
+    enabled-arrow-color: #9B70E8,
+    focused-arrow-color: #2E2C2C,
+  ));
+}
+
 html, body { height: 100%; }
 body { margin: 0; padding: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 

@@ -2,8 +2,9 @@
   flex: 0 0 calc(30% - 1rem); // 4 cards por linha, considerando o gap
   box-sizing: border-box;
   background-color: white;
-  color: #9B70E8;
   text-align: center;
+  border: 1px solid black;
+  border-radius: 1rem;
 
   img {
     min-height: 400px;
@@ -27,6 +28,7 @@
       color: white;
       font-weight: 500;
       text-transform: uppercase;
+      border-radius: 1rem;
     }
   }
 
