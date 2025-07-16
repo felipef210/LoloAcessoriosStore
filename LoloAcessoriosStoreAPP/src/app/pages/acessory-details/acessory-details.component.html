@@ -1,0 +1,37 @@
+<div class="container">
+  <header>
+    <app-header></app-header>
+  </header>
+
+  <main>
+    @if (acessory) {
+      <div class="button-section">
+        <a mat-button routerLink="/"><mat-icon>arrow_back</mat-icon>Voltar</a>
+        <span>/ {{ acessory.category }} </span><span>/ {{ acessory.name }}</span>
+      </div>
+
+      <div class="main">
+        <figure>
+          <img class="main-picture" [src]="mainPicture">
+          <div class="mini-pictures">
+            @for (picture of acessory.pictures; track $index) {
+              <img class="secondary-pictures" [class.active-picture]="indexSelecionado === $index" [src]="picture" (click)="(changeMainPicture($index))">
+            }
+          </div>
+        </figure>
+
+        <div>
+          <span class="chip">{{ acessory.category }}</span>
+          <h1>{{ acessory.name }}</h1>
+          <h2>R$ {{ acessory.price| number:'1.2-2' }}</h2>
+        </div>
+      </div>
+    }
+  </main>
+
+
+  <footer>
+    <app-footer></app-footer>
+  </footer>
+</div>
+
