@@ -10,12 +10,13 @@ import { DecimalPipe } from '@angular/common';
 import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
+import { RatingComponent } from "../../shared/components/rating/rating.component";
 
 registerLocaleData(localePt);
 
 @Component({
   selector: 'app-acessory-details',
-  imports: [HeaderComponent, FooterComponent, MatButtonModule, MatIconModule, RouterLink, DecimalPipe],
+  imports: [HeaderComponent, FooterComponent, MatButtonModule, MatIconModule, RouterLink, DecimalPipe, RatingComponent],
   providers: [
     { provide: LOCALE_ID, useValue: 'pt-BR' }
   ],
@@ -28,7 +29,9 @@ export class AcessoryDetailsComponent implements OnInit {
 
   acessory!: AcessoryDTO;
   mainPicture!: string;
-  indexSelecionado = 0;
+  detailMenu: string = 'description';
+  indexSelecionado: number = 0;
+  clickedRating: number = 0;
 
   private acessoryService = inject(AcessoryService);
 
@@ -42,5 +45,9 @@ export class AcessoryDetailsComponent implements OnInit {
   changeMainPicture(index: number) {
     this.indexSelecionado = index
     this.mainPicture = this.acessory.pictures[index];
+  }
+
+  handleRating(rate: number) {
+
   }
 }

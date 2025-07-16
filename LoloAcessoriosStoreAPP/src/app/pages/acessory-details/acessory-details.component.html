@@ -20,11 +20,29 @@
           </div>
         </figure>
 
-        <div>
-          <span class="chip">{{ acessory.category }}</span>
-          <h1>{{ acessory.name }}</h1>
-          <h2>R$ {{ acessory.price| number:'1.2-2' }}</h2>
+        <div style="width: 100%;">
+          <div style="border-bottom: 1px solid rgba(128, 128, 128, 0.226); margin-bottom: 2rem;">
+            <span class="chip">{{ acessory.category }}</span><br>
+            <h1>{{ acessory.name }}</h1>
+            <span>
+              <app-rating [maxRating]="5" (rated)="handleRating($event)" [selectedRating]="clickedRating"></app-rating>
+              4.8 (100 avaliações)
+            </span>
+            <h2>R$ {{ acessory.price| number:'1.2-2' }}</h2>
+          </div>
+
+          <button mat-flat-button><mat-icon>favorite</mat-icon>Adicionar aos favoritos</button>
         </div>
+      </div>
+
+      <div class="details">
+        <div class="details-buttons">
+          <button (click)="detailMenu = 'description'" [class.active]="detailMenu === 'description'">Descrição</button>
+          <button (click)="detailMenu = 'ratings'" [class.active]="detailMenu === 'ratings'">Avaliações</button>
+        </div>
+        <p>
+          {{ acessory.description }}
+        </p>
       </div>
     }
   </main>
