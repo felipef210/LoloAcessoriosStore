@@ -7,10 +7,18 @@
   <input formControlName="search" type="text" placeholder="Digite aqui..." style="background-image: url('lupa.png');">
   <br>
   <span class="label">Ordenar por:</span>
-  <select formControlName="filterBy">
+  <mat-form-field appearance="outline" class="select">
+      <mat-select [formControl]="form.controls.filterBy">
+        <mat-option selected value="">Escolha uma opção</mat-option>
+        <mat-option value="lowerPrice">Menor Preço</mat-option>
+        <mat-option value="higherPrice">Maior Preço</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  <!-- <select formControlName="filterBy">
     <option value="" selected>Escolha uma opção</option>
     <option value="lowerPrice">Menor Preço</option>
     <option value="higherPrice">Maior Preço</option>
-  </select>
+  </select> -->
 </form>
 

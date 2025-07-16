@@ -14,7 +14,7 @@ export class AcessoryService {
   constructor() { }
 
   private http = inject(HttpClient);
-  private url = environment.apiURL + '/api/acessories'
+  private readonly url = environment.apiURL + '/api/acessories'
 
   public getLanding(pagination: PaginationDTO): Observable<HttpResponse<AcessoryDTO[]>> {
     let queryParams = buildQueryParams(pagination);
@@ -27,5 +27,9 @@ export class AcessoryService {
       params: queryParams,
       observe: 'response'
     });
+  }
+
+  public getAcessoryById(id: number): Observable<AcessoryDTO> {
+    return this.http.get<AcessoryDTO>(`${this.url}/${id}`);
   }
 }

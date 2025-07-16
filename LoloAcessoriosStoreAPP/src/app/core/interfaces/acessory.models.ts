@@ -1,4 +1,5 @@
 export interface AcessoryDTO {
+  id: number,
   name: string,
   price: number,
   description: string,

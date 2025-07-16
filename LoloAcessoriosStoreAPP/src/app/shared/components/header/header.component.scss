@@ -8,39 +8,56 @@
   }
 
   .signIn-signUp {
-    text-decoration: none;
-    height: 1.5rem;
     display: flex;
-    align-items: center;
-    width: 8rem;
+    text-decoration: none;
+    padding: 1.3rem;
+    border-radius: .7rem;
     color: #9B70E8;
-    margin-right: .2rem;
+    background-color: #F1F1F1;
+    margin-right: 1rem;
     font-weight: bold;
     font-size: .9rem;
-    cursor: pointer;
-
-    p {
-      line-height: 1.1;
-      margin-left: .3rem;
-    }
+    transition: .5s;
 
     mat-icon {
-      margin-bottom: .1rem;
+      margin-right: .3rem;
     }
   }
 
   .btn-header {
-    color: #F1F1F1;
-    background: #9B70E8;
+    color: #9B70E8;
+    background-color: #F1F1F1;
     font-size: .9rem;
-    border-radius: 1.5rem;
+    border-radius: .7rem;
     padding: 1.3rem;
+    transition: .5s;
   }
 
   img {
     scale: 1.5;
   }
+
+  .signIn-signUp.active-link,
+  .btn-header.active-link {
+    background-color: #9B70E8 !important;
+    color: white;
+
+    mat-icon {
+      color: white;
+    }
+  }
+
+  .signIn-signUp, .btn-header {
+    &:hover {
+        background-color: #9B70E8;
+        color: white;
+        mat-icon {
+          color: white;
+        }
+      }
+  }
 }
+
 
 .mobile-toolbar {
   display: none;

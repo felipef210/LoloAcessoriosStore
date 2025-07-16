@@ -5,6 +5,6 @@
     <h3>R${{ cardPrice | number:'1.2-2' }}</h3>
   </mat-card-content>
   <mat-card-actions class="btn-section">
-    <button matButton mat-flat-button>Detalhes</button>
+    <a matButton mat-flat-button [routerLink]="['/acessory', cardId]">Detalhes</a>
   </mat-card-actions>
 </mat-card>

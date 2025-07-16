@@ -1,3 +1,11 @@
+@use '@angular/material' as mat;
+
+.select {
+  @include mat.form-field-overrides((
+    outlined-focus-outline-color: #9B70E8,
+    outlined-hover-outline-color: #9B70E8,
+))};
+
 form {
   .categories {
       background-color: #9B70E8;
@@ -5,6 +13,7 @@ form {
       text-align: center;
       padding: 1.5rem;
       margin-bottom: 3rem;
+      font-size: 18px;
 
       li {
         display: inline;
@@ -43,11 +52,12 @@ form {
     }
   }
 
-  select {
-    border-radius: 0.5rem;
-    border: 2px solid black;
-    padding: 0.1rem;
-    width: 9rem;
+  span {
+    font-size: 18px;
+  }
+
+  .select {
+    width: 14rem;
   }
 
   .label {

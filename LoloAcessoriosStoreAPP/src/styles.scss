@@ -28,14 +28,14 @@
     outlined-hover-label-text-color: #2E2C2C,
     outlined-hover-outline-color: #2E2C2C,
     outlined-input-text-placeholder-color: #2E2C2C,
-    outlined-caret-color: #2E2C2C
+    outlined-caret-color: #2E2C2C,
+    outlined-outline-width: 2px,
+    outlined-container-shape: 1rem,
   ));
 
   @include mat.select-overrides((
     panel-background-color: white,
-    enabled-trigger-text-color: #2E2C2C,
-    enabled-arrow-color: #9B70E8,
-    focused-arrow-color: #2E2C2C,
+    enabled-trigger-text-color: #2E2C2C
   ));
 }
 

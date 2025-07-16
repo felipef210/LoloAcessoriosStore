@@ -2,10 +2,12 @@ import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FilterAcessoryDTO } from '../../../core/interfaces/acessory.models';
 import { debounceTime } from 'rxjs';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-search',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatSelectModule],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss'
 })

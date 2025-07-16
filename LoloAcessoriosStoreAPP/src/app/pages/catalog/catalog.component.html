@@ -12,7 +12,7 @@
     <section class="card-list">
       @if (acessoryList) {
         @for (acessory of acessoryList; track $index) {
-          <app-acessory-card [cardImage]="acessory.pictures[0]" [cardName]="acessory.name" [cardPrice]="acessory.price"></app-acessory-card>
+          <app-acessory-card [cardImage]="acessory.pictures[0]" [cardName]="acessory.name" [cardPrice]="acessory.price" [cardId]="acessory.id"></app-acessory-card>
         }
       }
 

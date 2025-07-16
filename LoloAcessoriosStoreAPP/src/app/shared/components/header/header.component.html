@@ -4,12 +4,12 @@
   </a>
   <span class="spacer"></span>
 
-  <a routerLink="/login" class="signIn-signUp">
+  <a routerLink="/login" routerLinkActive="active-link" class="signIn-signUp" mat-raised-button>
     <mat-icon class="purple-icon">person</mat-icon>
-    <p>Entre ou<br> cadastre-se</p>
+    <span>Entre ou cadastre-se</span>
   </a>
-  <a routerLink="/" mat-flat-button class="btn-header">
-    <mat-icon class="white-icon">article</mat-icon>
+  <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }" mat-raised-button class="btn-header">
+    <mat-icon class="purple-icon">shopping_cart_checkout</mat-icon>
     <span>Catálogo</span>
   </a>
 </mat-toolbar>
