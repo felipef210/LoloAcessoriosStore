@@ -1,0 +1,146 @@
+form {
+  display: flex;
+  justify-content: center;
+
+  .error {
+    display: block;
+    margin-top: -.5rem;
+    color: red;
+  }
+
+  input, select, textarea {
+    min-width: 40rem;
+    border-radius: 1rem;
+    padding: .5rem;
+    border: 1px solid gray;
+    outline: none;
+    margin-top: .3rem;
+
+    &:focus {
+      border: 2px solid #9B70E8;
+      box-shadow: 0 0 0 2px rgba(155, 112, 232, 0.2);
+    }
+  }
+
+  input, select {
+    margin-bottom: 1rem;
+
+    &.ng-invalid.ng-dirty {
+      border: 1px solid red;
+      box-shadow: none;
+    }
+  }
+
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  select {
+    min-width: 41rem;
+  }
+
+  textarea {
+    min-height: 6rem;
+    resize: none;
+  }
+
+  .fields-area {
+    height: 30rem;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 0 1px rgb(224, 224, 224);
+
+    h3 {
+      margin: 0;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .picture-column {
+    width: 30%;
+    margin-left: 4rem;
+
+
+    h3 {
+      margin: 0;
+    }
+
+    button {
+      width: 100%;
+      background-color: #9B70E8;
+      color: white;
+      margin-bottom: 1rem;
+
+      &:disabled {
+        background-color: gray;
+      }
+    }
+
+    a {
+      background-color: red;
+      color: white;
+      width: 100%;
+    }
+
+    .picture-area {
+      padding: 2rem;
+      background-color: white;
+      border-radius: 1rem;
+      box-shadow: 0 0 0 1px rgb(224, 224, 224);
+      margin-bottom: 2rem;
+
+      .image-preview-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .main-image img {
+          width: 300px;
+          height: auto;
+          border-radius: 1rem;
+          border: 2px solid #ccc;
+          margin: 1rem 0;
+        }
+
+        .thumbnail-list {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+          justify-content: center;
+
+          .thumbnail {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border: 2px solid transparent;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: border 0.3s;
+
+            &.selected {
+              border-color: #9B70E8;
+            }
+          }
+        }
+      }
+
+      .btn-image-input {
+        display: none;
+      }
+
+      figure {
+        margin: 0;
+        text-align: center;
+        img {
+          width: 20rem;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+
+}

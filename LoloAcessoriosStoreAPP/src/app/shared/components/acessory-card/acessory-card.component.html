@@ -5,6 +5,15 @@
     <h3>R${{ cardPrice | number:'1.2-2' }}</h3>
   </mat-card-content>
   <mat-card-actions class="btn-section">
-    <a matButton mat-flat-button [routerLink]="['/acessory', cardId]">Detalhes</a>
+    <app-authorized role="admin">
+      <ng-container authorized>
+        <a [routerLink]="['/acessory/edit', cardId]" matButton mat-flat-button style="background-color: blue; margin-right: .1rem; width: 49%; color: white; border-radius: .5rem;"><mat-icon matPrefix>edit</mat-icon>Editar</a>
+        <button matButton mat-flat-button style="background-color: red; width: 49%; color: white; border-radius: .5rem;"><mat-icon matPrefix>cancel</mat-icon>Deletar</button>
+      </ng-container>
+
+      <ng-container notAuthorized>
+        <a matButton mat-flat-button [routerLink]="['/acessory', cardId]" class="details">Detalhes</a>
+      </ng-container>
+    </app-authorized>
   </mat-card-actions>
 </mat-card>

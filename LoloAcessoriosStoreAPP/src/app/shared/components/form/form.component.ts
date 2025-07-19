@@ -1,4 +1,4 @@
-import { Component, inject, Input, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, ViewEncapsulation } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,10 +8,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { matchValidator } from '../../functions/matchValidator';
 import { RouterLink } from '@angular/router';
+import { CreateUserDTO, LoginDTO } from '../../../core/interfaces/user.models';
+import { DisplayErrorsComponent } from "../display-errors/display-errors.component";
 
 @Component({
   selector: 'app-form',
-  imports: [MatFormFieldModule, MatIconModule, MatInputModule, MatDatepickerModule, MatSelectModule, ReactiveFormsModule, MatButtonModule, RouterLink],
+  imports: [MatFormFieldModule, MatIconModule, MatInputModule, MatDatepickerModule, MatSelectModule, ReactiveFormsModule, MatButtonModule, RouterLink, DisplayErrorsComponent],
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss',
   encapsulation: ViewEncapsulation.None
@@ -24,6 +26,15 @@ export class FormComponent {
 
   @Input()
   title!: string;
+
+  @Input()
+  errors: string[] = [];
+
+  @Output()
+  loginForm = new EventEmitter<LoginDTO>();
+
+  @Output()
+  registerForm = new EventEmitter<CreateUserDTO>();
 
   form = this.formBuilder.group({
     name: [''],
@@ -42,8 +53,6 @@ export class FormComponent {
     this.form.controls.gender.valueChanges.subscribe(value => {
       this.updateGenderIcon(value);
     });
-
-
   }
 
   ngOnInit() {
@@ -57,7 +66,7 @@ export class FormComponent {
       this.form.controls.gender.setValidators([Validators.required]);
       this.form.controls.confirmPassword.setValidators([Validators.required]);
 
-      // Se quiser validar se password === confirmPassword
+      // Verify if confirm password field match with password field.
       this.form.setValidators(matchValidator('password', 'confirmPassword'));
     }
 
@@ -67,10 +76,10 @@ export class FormComponent {
       this.form.controls.gender.setValidators(null);
       this.form.controls.confirmPassword.setValidators(null);
 
-      this.form.clearValidators(); // Remove matchValidator se não for necessário
+      this.form.clearValidators();
     }
 
-    // Atualiza o estado de validação dos campos
+    // Update the state of the validation fields.
     Object.values(this.form.controls).forEach(control => control.updateValueAndValidity());
   }
 
@@ -151,6 +160,20 @@ export class FormComponent {
   }
 
   saveChanges() {
-    console.log(this.form.valid);
+    if (!this.isLogin) {
+      const credentials: CreateUserDTO = {
+        name: this.form.value.name!,
+        dateOfBirth: new Date(this.form.value.dateOfBirth!),
+        gender: this.form.value.gender!,
+        email: this.form.value.email!,
+        password: this.form.value.password!,
+        rePassword: this.form.value.confirmPassword!,
+      };
+      this.registerForm.emit(credentials);
+  }
+    else {
+      const credentials = this.form.value as LoginDTO;
+      this.loginForm.emit(credentials);
+    }
   }
 }

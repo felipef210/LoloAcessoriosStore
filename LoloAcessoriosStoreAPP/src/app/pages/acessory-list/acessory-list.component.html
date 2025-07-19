@@ -1,0 +1,46 @@
+<div class="container">
+  <app-header></app-header>
+  <main>
+    <h1>Acessórios</h1>
+
+    <table>
+      <tr>
+        <th style="width: 10%;"></th>
+        <th style="width: 50%;">Nome</th>
+        <th style="width: 10%;">Preço</th>
+        <th style="width: 20%;">Ações</th>
+      </tr>
+      @if (pagination.page == 1) {
+        <tr>
+          <td></td>
+          <td>Novo item</td>
+          <td>?</td>
+          <td><a routerLink="/acessory/create" mat-icon-button style="border-radius: 2rem;  background-color: green;"><mat-icon style="color: white;">add</mat-icon></a></td>
+        </tr>
+      }
+      @for (acessory of acessoryList; track $index) {
+        <tr>
+          <td><img [src]="acessory.pictures[0]"></td>
+          <td>{{ acessory.name }}</td>
+          <td>R${{ acessory.price | number:'1.2-2' }}</td>
+          <td>
+            <a [routerLink]="['/acessory/edit', acessory.id]" mat-icon-button style="background-color: blue;"><mat-icon>edit</mat-icon></a>
+            <button mat-icon-button style="background-color: red;"><mat-icon>cancel</mat-icon></button>
+          </td>
+        </tr>
+      }
+    </table>
+
+    <section class="pagination">
+      <app-pagination
+        [currentPage]="pagination.page"
+        [recordsPerPage]="pagination.recordsPerPage"
+        [totalRecords]="pagination.totalRecords || 0"
+        (pageChange)="onPageChange($event)"></app-pagination>
+    </section>
+  </main>
+
+  <footer>
+    <app-footer></app-footer>
+  </footer>
+</div>

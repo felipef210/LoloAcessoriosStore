@@ -8,13 +8,14 @@ import localePt from '@angular/common/locales/pt';
 
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { AuthorizedComponent } from "../../security/authorized/authorized.component";
 
 registerLocaleData(localePt);
 
 
 @Component({
   selector: 'app-acessory-card',
-  imports: [MatButtonModule, MatCardModule, DecimalPipe, MatIconModule, RouterLink],
+  imports: [MatButtonModule, MatCardModule, DecimalPipe, MatIconModule, RouterLink, AuthorizedComponent],
   providers: [
     { provide: LOCALE_ID, useValue: 'pt-BR' }
   ],

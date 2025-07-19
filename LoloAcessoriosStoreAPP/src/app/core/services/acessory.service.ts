@@ -2,7 +2,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { AcessoryDTO, FilterAcessoryDTO } from '../interfaces/acessory.models';
+import { AcessoryDTO, CreateAcessoryDTO, FilterAcessoryDTO } from '../interfaces/acessory.models';
 import { PaginationDTO } from '../interfaces/paginationDTO';
 import { buildQueryParams } from '../../shared/functions/buildQueryParams';
 
@@ -31,5 +31,14 @@ export class AcessoryService {
 
   public getAcessoryById(id: number): Observable<AcessoryDTO> {
     return this.http.get<AcessoryDTO>(`${this.url}/${id}`);
+  }
+
+  public createAcessory(acessory: CreateAcessoryDTO): Observable<any> {
+    return this.http.post(this.url, acessory);
+  }
+
+
+  public updateAcessory(id: number, acessory: CreateAcessoryDTO): Observable<any> {
+    return this.http.put(`${this.url}/${id}`, acessory);
   }
 }

@@ -1,0 +1,72 @@
+<form>
+  <div class="fields-area">
+    <h3>Dados do acessório</h3>
+    <label for="acessoryName">Nome do acessório*</label><br>
+    <input name="acessoryName" type="text" placeholder="Ex:Colar dourado" [formControl]="form.controls.name"><br>
+    @if (form.controls.name.hasError('required') && form.controls.name.dirty) {
+      <span class="error">*{{ getErrorMessagesForName() }}</span><br>
+    }
+
+    <label for="acessoryPrice">Preço*</label><br>
+    <input name="acessoryPrice" type="number" placeholder="R$0,00" [formControl]="form.controls.price"><br>
+
+    <label for="acessoryCategory">Categoria*</label><br>
+    <select [formControl]="form.controls.category">
+      <option selected disabled value="">Selecione a categoria...</option>
+      @for (category of categories; track $index) {
+        <option value="{{ category }}">{{ category }}</option>
+      }
+    </select><br>
+
+    <label for="acessoryDescription">Descrição</label><br>
+    <textarea placeholder="Descreva seu acessório..."></textarea>
+  </div>
+
+  <div class="picture-column">
+    <div class="picture-area">
+      <h3>Adicionar Imagens</h3>
+      @if (!imageBase64) {
+        <figure>
+          <img src="camera.jpg" (click)="fileInput.click()"/>
+          <input
+            type="file"
+            accept="image/*"
+            (change)="onImageSelected($event)"
+            multiple
+            class="btn-image-input"
+            #fileInput
+          />
+        </figure>
+      }
+
+      @else {
+        <div class="image-preview-area">
+          <figure class="main-image">
+            <img [src]="imageBase64[selectedImageIndex]" alt="Imagem principal" />
+          </figure>
+
+          <div class="thumbnail-list">
+            @for (image of imageBase64; track $index) {
+              <img
+                [src]="image"
+                [class.selected]="$index === selectedImageIndex"
+                (click)="setMainImage($index)"
+                class="thumbnail"
+              />
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (isCreation) {
+      <button mat-raised-button [disabled]="form.invalid"><mat-icon>save</mat-icon>Adicionar acessório</button>
+    }
+
+    @else {
+      <button mat-raised-button [disabled]="form.invalid"><mat-icon>save</mat-icon>Salvar alterações</button>
+    }
+    <a routerLink="/acessories" mat-raised-button><mat-icon>cancel</mat-icon>Cancelar</a>
+  </div>
+
+</form>

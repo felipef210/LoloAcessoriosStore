@@ -1,0 +1,14 @@
+<div class="container">
+  <app-header></app-header>
+
+  <main>
+    <h1>Criar Novo Acessório</h1>
+    <h4>Preencha os detalhes do seu acessório</h4>
+
+    <app-form-acessory [isCreation]="creation" (acessoryForm)="onSubmit($event)"></app-form-acessory>
+  </main>
+
+  <footer>
+    <app-footer></app-footer>
+  </footer>
+</div>

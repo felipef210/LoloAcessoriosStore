@@ -75,6 +75,8 @@
     </mat-form-field>
   }
 
+  <app-display-errors [errors]="errors"></app-display-errors>
+
   @if (!isLogin) {
     <button type="submit" mat-raised-button class="btnRegister" [disabled]="form.invalid">Registrar</button>
   }

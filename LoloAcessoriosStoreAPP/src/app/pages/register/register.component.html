@@ -4,7 +4,7 @@
   </header>
 
   <main>
-    <app-form [isLogin]="false" [title]="'Registrar-se'"></app-form>
+    <app-form [isLogin]="false" [title]="'Registrar-se'" (registerForm)="register($event)" [errors]="errors"></app-form>
   </main>
 
   <footer>
