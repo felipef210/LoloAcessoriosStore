@@ -8,7 +8,7 @@ import { isAdminGuard } from './shared/guards/is-admin.guard';
 import { AcessoryListComponent } from './pages/acessory-list/acessory-list.component';
 import { UserListComponent } from './pages/user-list/user-list.component';
 import { isLoggedInGuard } from './shared/guards/is-logged-in.guard';
-import { CreateAcessoryComponent } from './pages/create-acessory/create-acessory.component';
+import { CreateAcessoryComponent } from './pages/create-acessory/acessory-create.component';
 
 export const routes: Routes = [
   {path: '', component: CatalogComponent},

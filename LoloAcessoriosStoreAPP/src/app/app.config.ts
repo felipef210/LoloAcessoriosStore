@@ -4,7 +4,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter'
 import { routes } from './app.routes';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { tokenInterceptorHTTP } from './core/interceptors/token-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,6 +24,7 @@ export const appConfig: ApplicationConfig = {
         monthYearA11yLabel: 'MMMM YYYY',
       },
     }),
+    provideHttpClient(withFetch(), withInterceptors([tokenInterceptorHTTP])),
     provideHttpClient(withFetch())
   ]
 };

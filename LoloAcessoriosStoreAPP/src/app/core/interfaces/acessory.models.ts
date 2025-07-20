@@ -13,7 +13,7 @@ export interface CreateAcessoryDTO {
   price: number,
   description: string,
   category: string,
-  pictures?: File[],
+  pictures: File[],
   lastUpdate: Date
 }
 

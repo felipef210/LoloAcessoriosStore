@@ -33,12 +33,31 @@ export class AcessoryService {
     return this.http.get<AcessoryDTO>(`${this.url}/${id}`);
   }
 
-  public createAcessory(acessory: CreateAcessoryDTO): Observable<any> {
-    return this.http.post(this.url, acessory);
+  public createAcessory(acessory: CreateAcessoryDTO): Observable<CreateAcessoryDTO> {
+    const formData = this.buildFormData(acessory);
+    return this.http.post<CreateAcessoryDTO>(this.url, formData);
   }
 
+  public updateAcessory(id: number, acessory: CreateAcessoryDTO): Observable<CreateAcessoryDTO> {
+    const formData = this.buildFormData(acessory);
+    return this.http.put<CreateAcessoryDTO>(`${this.url}/${id}`, formData);
+  }
 
-  public updateAcessory(id: number, acessory: CreateAcessoryDTO): Observable<any> {
-    return this.http.put(`${this.url}/${id}`, acessory);
+  public deleteAcessory(id: number) {
+    return this.http.delete(`${this.url}/${id}`);
+  }
+
+  private buildFormData(acessory: CreateAcessoryDTO): FormData {
+    const formData = new FormData();
+
+    formData.append('name', acessory.name);
+    formData.append('price', acessory.price.toString().replace(',', '.'));
+    formData.append('category', acessory.category);
+    formData.append('description', acessory.description);
+    acessory.pictures.forEach(file => {
+      formData.append('pictures', file);
+    });
+
+    return formData;
   }
 }

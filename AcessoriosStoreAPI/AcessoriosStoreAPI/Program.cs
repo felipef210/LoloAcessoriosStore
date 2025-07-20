@@ -6,11 +6,15 @@ using AcessoriosStoreAPI.Utilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
 using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
 var connString = builder.Configuration["PostgresConnection"];
+var cultureInfo = new CultureInfo("en-US");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 builder.Services.AddCors(options =>
 {

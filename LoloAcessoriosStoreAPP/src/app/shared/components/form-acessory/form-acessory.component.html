@@ -1,4 +1,4 @@
-<form>
+<form (submit)="saveChanges()" [formGroup]="form">
   <div class="fields-area">
     <h3>Dados do acessório</h3>
     <label for="acessoryName">Nome do acessório*</label><br>
@@ -19,7 +19,7 @@
     </select><br>
 
     <label for="acessoryDescription">Descrição</label><br>
-    <textarea placeholder="Descreva seu acessório..."></textarea>
+    <textarea placeholder="Descreva seu acessório..." [formControl]="form.controls.description"></textarea>
   </div>
 
   <div class="picture-column">
@@ -42,17 +42,38 @@
       @else {
         <div class="image-preview-area">
           <figure class="main-image">
-            <img [src]="imageBase64[selectedImageIndex]" alt="Imagem principal" />
+            @if (isCreation) {
+              <img [src]="imageBase64[selectedImageIndex]" alt="Imagem principal" />
+            }
+
+            @else {
+              <img [src]="imageUrls[selectedImageIndex]" alt="Imagem principal" />
+            }
           </figure>
 
-          <div class="thumbnail-list">
-            @for (image of imageBase64; track $index) {
-              <img
-                [src]="image"
-                [class.selected]="$index === selectedImageIndex"
-                (click)="setMainImage($index)"
-                class="thumbnail"
-              />
+          <div cdkDropList (cdkDropListDropped)="drop($event)" class="thumbnail-list">
+            @if (isCreation) {
+              @for (image of imageBase64; track $index) {
+                <img
+                  cdkDrag
+                  [src]="image"
+                  [class.selected]="$index === selectedImageIndex"
+                  (click)="setMainImage($index)"
+                  class="thumbnail"
+                />
+              }
+            }
+
+            @else {
+              @for (url of imageUrls; track $index) {
+                <img
+                  cdkDrag
+                  [src]="url"
+                  [class.selected]="$index === selectedImageIndex"
+                  (click)="setMainImage($index)"
+                  class="thumbnail"
+                />
+              }
             }
           </div>
         </div>
@@ -68,5 +89,4 @@
     }
     <a routerLink="/acessories" mat-raised-button><mat-icon>cancel</mat-icon>Cancelar</a>
   </div>
-
 </form>

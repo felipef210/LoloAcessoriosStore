@@ -1,1 +1,16 @@
-<p>{{ acessoryModel.name }}</p>
+<div class="container">
+  <app-header></app-header>
+
+  <main>
+    <h1>Edite Seu Acessório</h1>
+    <h4>Preencha os detalhes do seu acessório</h4>
+
+    @if (acessoryModel) {
+      <app-form-acessory [model]="acessoryModel" [isCreation]="creation" (acessoryForm)="onSubmit($event)"></app-form-acessory>
+    }
+  </main>
+
+  <footer>
+    <app-footer></app-footer>
+  </footer>
+</div>

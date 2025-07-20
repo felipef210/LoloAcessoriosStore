@@ -10,8 +10,8 @@ import { extractErrors } from '../../shared/functions/extractErrors';
 @Component({
   selector: 'app-create-acessory',
   imports: [HeaderComponent, FooterComponent, FormAcessoryComponent],
-  templateUrl: './create-acessory.component.html',
-  styleUrl: './create-acessory.component.scss'
+  templateUrl: './acessory-create.component.html',
+  styleUrl: './acessory-create.component.scss'
 })
 export class CreateAcessoryComponent {
   creation: boolean = true;
@@ -23,7 +23,7 @@ export class CreateAcessoryComponent {
   onSubmit(dto: CreateAcessoryDTO) {
     this.acessoryService.createAcessory(dto).subscribe({
       next: () => {
-        this.router.navigate(['/acessories']);
+        this.router.navigate(['/acessories'])
       },
       error: err => {
         this.errors = extractErrors(err);

@@ -3,26 +3,57 @@ h1 {
   color: #9B70E8;
 }
 
-table, th, td {
-  border: 1px solid #9B70E8;
-  border-collapse: collapse;
-}
-
 table {
   margin: 2rem auto;
   width: 80%;
+  border-collapse: separate;
+  border-spacing: 0;
   border-radius: 1rem;
+  overflow: hidden;
+
+  th, td {
+    text-align: center;
+    padding: 0.5rem;
+    border: 2px solid #9B70E8;
+  }
+
+  // Remove borda duplicada nas células internas
+  td:not(:first-child),
+  th:not(:first-child) {
+    border-left: none;
+  }
+
+  tr:not(:first-child) td,
+  tr:not(:first-child) th {
+    border-top: none;
+  }
+
+  // Cantos arredondados
+  tr:first-child th:first-child {
+    border-top-left-radius: 1rem;
+  }
+
+  tr:first-child th:last-child {
+    border-top-right-radius: 1rem;
+  }
+
+  tr:last-child td:first-child {
+    border-bottom-left-radius: 1rem;
+  }
+
+  tr:last-child td:last-child {
+    border-bottom-right-radius: 1rem;
+  }
+
   tr {
     td {
-      text-align: center;
-      padding: .5rem;
       a, button {
         color: white;
-        border-radius: .5rem;
+        border-radius: 1.5rem;
       }
 
       a {
-        margin-right: .5rem;
+        margin-right: 0.5rem;
       }
     }
   }
@@ -31,4 +62,3 @@ table {
 img {
   width: 3rem;
 }
-

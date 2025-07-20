@@ -124,6 +124,13 @@ form {
               border-color: #9B70E8;
             }
           }
+
+          .thumbnail-wrapper {
+            cursor: grab;
+            &:active {
+              cursor: grabbing;
+            }
+          }
         }
       }
 

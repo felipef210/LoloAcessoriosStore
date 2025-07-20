@@ -25,7 +25,7 @@
           <td>R${{ acessory.price | number:'1.2-2' }}</td>
           <td>
             <a [routerLink]="['/acessory/edit', acessory.id]" mat-icon-button style="background-color: blue;"><mat-icon>edit</mat-icon></a>
-            <button mat-icon-button style="background-color: red;"><mat-icon>cancel</mat-icon></button>
+            <button mat-icon-button style="background-color: red;" (click)="askDelete(acessory.id)"><mat-icon>cancel</mat-icon></button>
           </td>
         </tr>
       }
@@ -44,3 +44,8 @@
     <app-footer></app-footer>
   </footer>
 </div>
+
+@if (showModal) {
+  <app-dialog [title]="'Excluir'" message="Tem certeza que deseja excluir ''{{ acessoryName }}'' ?" (confirm)="delete()" (cancel)="cancelDelete()"></app-dialog>
+}
+
