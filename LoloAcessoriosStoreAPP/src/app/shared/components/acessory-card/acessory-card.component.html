@@ -1,5 +1,5 @@
 <mat-card class="card" appearance="outlined">
-  <img mat-card-image [src]="cardImage">
+  <a [routerLink]="['/acessory', cardId]"><img mat-card-image [src]="cardImage"></a>
   <mat-card-content>
     <h2>{{ cardName }}</h2>
     <h3>R${{ cardPrice | number:'1.2-2' }}</h3>
@@ -8,7 +8,7 @@
     <app-authorized role="admin">
       <ng-container authorized>
         <a [routerLink]="['/acessory/edit', cardId]" matButton mat-flat-button style="background-color: blue; margin-right: .1rem; width: 49%; color: white; border-radius: .5rem;"><mat-icon matPrefix>edit</mat-icon>Editar</a>
-        <button matButton mat-flat-button (click)="askDelete(cardId)" style="background-color: red; width: 49%; color: white; border-radius: .5rem;"><mat-icon matPrefix>cancel</mat-icon>Deletar</button>
+        <button (click)="confirmation()" matButton mat-flat-button style="background-color: red; width: 49%; color: white; border-radius: .5rem;"><mat-icon matPrefix>cancel</mat-icon>Deletar</button>
       </ng-container>
 
       <ng-container notAuthorized>
@@ -18,6 +18,3 @@
   </mat-card-actions>
 </mat-card>
 
-@if (showModal) {
-  <app-dialog [title]="'Excluir'" message="Tem certeza que deseja excluir ''{{ cardName }}'' ?" (confirm)="delete()" (cancel)="cancelDelete()"></app-dialog>
-}

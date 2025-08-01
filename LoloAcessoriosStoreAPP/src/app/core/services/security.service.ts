@@ -1,10 +1,12 @@
 import { AuthenticationResponseDTO } from './../../shared/security/security.models';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { CreateUserDTO, LoginDTO } from '../interfaces/user.models';
+import { CreateUserDTO, LoginDTO, UpdateOwnProfileDTO, UpdateProfileDTO, UserProfileDTO } from '../interfaces/user.models';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { buildQueryParams } from '../../shared/functions/buildQueryParams';
+import { PaginationDTO } from '../interfaces/paginationDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,27 @@ export class SecurityService {
   private readonly keyToken = 'token';
   private readonly keyExpiration = 'token-expiration;'
 
+  getUsersPaginated(pagination: PaginationDTO): Observable<HttpResponse<UserProfileDTO[]>> {
+    let queryParams = buildQueryParams(pagination);
+    return this.http.get<UserProfileDTO[]>(this.url, {params: queryParams, observe: 'response'});
+  }
+
+  getUserByEmail(email: string): Observable<UserProfileDTO> {
+    return this.http.get<UserProfileDTO>(`${this.url}/admin/getuser/${email}`);
+  }
+
+  getOwnProfile(): Observable<UserProfileDTO> {
+    return this.http.get<UserProfileDTO>(`${this.url}/getuser`);
+  }
+
+  updateOwnProfile(user: UpdateOwnProfileDTO): Observable<AuthenticationResponseDTO> {
+    return this.http.put<AuthenticationResponseDTO>(`${this.url}/edit-user`, user);
+  }
+
+  updateProfile(email: string, user: UpdateProfileDTO) {
+    return this.http.put(`${this.url}/admin/edit-user/${email}`, user)
+  }
+
   register(credentials: CreateUserDTO): Observable<AuthenticationResponseDTO> {
     return this.http.post<AuthenticationResponseDTO>(`${this.url}/register`, credentials)
     .pipe(
@@ -31,6 +54,14 @@ export class SecurityService {
     .pipe(
       tap(response => this.storeToken(response))
     );
+  }
+
+  makeAdmin(email: string) {
+    return this.http.post(`${this.url}/makeadmin`, {email});
+  }
+
+  removeAdmin(email: string) {
+    return this.http.post(`${this.url}/removeadmin`, {email});
   }
 
   storeToken(authenticationResponse: AuthenticationResponseDTO) {

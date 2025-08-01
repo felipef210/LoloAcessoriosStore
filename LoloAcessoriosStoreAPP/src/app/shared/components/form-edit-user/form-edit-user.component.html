@@ -1,0 +1,69 @@
+<form (ngSubmit)="saveChanges()">
+  <div class="form-container">
+    <nav class="navigation-buttons">
+      <button type="button" (click)="changeMenu('personal')" [class.active]="menu === 'personal'">Pessoal</button>
+      <button type="button" (click)="changeMenu('security')" [class.active]="menu === 'security'">Segurança</button>
+    </nav>
+
+    @if (menu === 'personal') {
+      <fieldset>
+        <h2><mat-icon>person</mat-icon> Informações Pessoais</h2>
+        <span>Atualize suas informações básicas do perfil</span><br>
+
+        <div class="fields">
+          <div class="column">
+            <label for="name">Nome completo</label><br>
+            <input id="name" type="text" [formControl]="form.controls.name"><br>
+            <label for="gender">Gênero</label><br>
+            <select id="gender" [formControl]="form.controls.gender">
+              <option selected disabled>Selecione uma opção...</option>
+              <option value="Masculino">Masculino</option>
+              <option value="Feminino">Feminino</option>
+              <option value="Others">Outros</option>
+            </select><br>
+          </div>
+
+          <div class="column">
+            <label for="email">Email</label><br>
+            <input id="email" type="email" [formControl]="form.controls.email"><br>
+            <label for="birthDate">Data de nascimento</label><br>
+            <input id="birthDate" type="date" [formControl]="form.controls.dateOfBirth">
+          </div>
+        </div>
+      </fieldset>
+    }
+
+    @else {
+      <fieldset>
+        <h2><mat-icon>security</mat-icon>Configurações de segurança</h2>
+        <span style="margin-right: 1rem;">Altere sua senha aqui</span><br>
+        <label class="switch">
+          <input type="checkbox" [formControl]="form.controls.isEnabled">
+          <span class="slider"></span>
+        </label><br>
+
+        <div class="fields">
+          @if (!isAdmin) {
+            <div class="column">
+              <label for="currentPassword">Senha atual</label><br>
+              <input [disabled]="form.controls.isEnabled.value == false" id="currentPassword" type="password" [formControl]="form.controls.currentPassword">
+            </div>
+          }
+
+          <div class="column">
+            <label for="newPassword">Nova senha</label><br>
+            <input [disabled]="form.controls.isEnabled.value == false" id="newPassword" type="password" [formControl]="form.controls.newPassword"><br>
+
+            <label for="rePassword">Repetir nova senha</label><br>
+            <input [disabled]="form.controls.isEnabled.value == false" id="rePassword" type="password" [formControl]="form.controls.rePassword">
+          </div>
+        </div>
+      </fieldset>
+    }
+
+
+    <div class="submit-button">
+      <button mat-raised-button type="button" (click)="saveChanges()"><mat-icon>save</mat-icon>Salvar alterações</button>
+    </div>
+  </div>
+</form>

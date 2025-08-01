@@ -31,5 +31,13 @@ public class AutoMapperProfiles : Profile
 
         CreateMap<User, UserDTO>();
         CreateMap<User, UserProfileDTO>();
+
+        CreateMap<UserUpdateDTO, User>()
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email))
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
+
+        CreateMap<UserUpdateOwnProfileDTO, User>()
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email))
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
     }
 }

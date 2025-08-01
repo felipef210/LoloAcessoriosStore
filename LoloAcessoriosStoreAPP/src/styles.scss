@@ -94,3 +94,21 @@ main {
     }
   }
 }
+
+.dialog-btn-confirm {
+  background-color: green;
+  color: white;
+
+  &:hover {
+    background-color: rgb(1, 104, 1);
+  }
+}
+
+.dialog-btn-cancel {
+  background-color: red;
+  color: white;
+
+  &:hover {
+    background-color: rgb(180, 0, 0);
+  }
+}

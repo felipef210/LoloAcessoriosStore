@@ -10,14 +10,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { AuthorizedComponent } from "../../security/authorized/authorized.component";
 import { AcessoryService } from '../../../core/services/acessory.service';
-import { DialogComponent } from "../dialog/dialog.component";
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 registerLocaleData(localePt);
 
 
 @Component({
   selector: 'app-acessory-card',
-  imports: [MatButtonModule, MatCardModule, DecimalPipe, MatIconModule, RouterLink, AuthorizedComponent, DialogComponent],
+  imports: [MatButtonModule, MatCardModule, DecimalPipe, MatIconModule, RouterLink, AuthorizedComponent, SweetAlert2Module],
   providers: [
     { provide: LOCALE_ID, useValue: 'pt-BR' }
   ],
@@ -38,35 +38,9 @@ export class AcessoryCardComponent {
   cardId!: number;
 
   @Output()
-  reload = new EventEmitter<void>();
+  openAlert = new EventEmitter<number>();
 
-
-  private acessoryService = inject(AcessoryService);
-
-  showModal: boolean = false;
-  deleteIdToConfirm: number | null = null;
-
-  askDelete(id: number) {
-    this.deleteIdToConfirm = id;
-    this.showModal = true;
-    document.body.style.overflow = 'hidden';
-  }
-
-  delete() {
-    if(this.deleteIdToConfirm !== null)
-      this.acessoryService.deleteAcessory(this.deleteIdToConfirm).subscribe(() => {
-        this.resetModal();
-        this.reload.emit();
-      });
-  }
-
-  cancelDelete() {
-    this.resetModal();
-  }
-
-  resetModal() {
-    this.showModal = false;
-    this.deleteIdToConfirm = null;
-    document.body.style.overflow = '';
+  confirmation() {
+    this.openAlert.emit(this.cardId);
   }
 }

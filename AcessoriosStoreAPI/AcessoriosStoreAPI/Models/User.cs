@@ -11,7 +11,7 @@ public class User : IdentityUser
     [Required(ErrorMessage = "You must fill the {0} field")]
     public DateTime DateOfBirth { get; set; }
     [Required(ErrorMessage = "You must fill the {0} field")]
-    public string Gender { get; private set; }
+    public string Gender { get; set; }
 
     public bool IsAdmin { get; set; }
     public User() : base() { }

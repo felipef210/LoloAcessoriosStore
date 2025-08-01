@@ -5,10 +5,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
-import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { matchValidator } from '../../functions/matchValidator';
 import { RouterLink } from '@angular/router';
-import { CreateUserDTO, LoginDTO } from '../../../core/interfaces/user.models';
+import { CreateUserDTO, LoginDTO, UpdateOwnProfileDTO, UpdateProfileDTO, UserProfileDTO } from '../../../core/interfaces/user.models';
 import { DisplayErrorsComponent } from "../display-errors/display-errors.component";
 
 @Component({
@@ -25,10 +25,16 @@ export class FormComponent {
   isLogin!: boolean;
 
   @Input()
+  isEditProfile!: boolean;
+
+  @Input()
   title!: string;
 
   @Input()
   errors: string[] = [];
+
+  @Input()
+  model!: UserProfileDTO;
 
   @Output()
   loginForm = new EventEmitter<LoginDTO>();
@@ -38,11 +44,11 @@ export class FormComponent {
 
   form = this.formBuilder.group({
     name: [''],
-    dateOfBirth: [''],
+    dateOfBirth: new FormControl<Date | null>(null),
     gender: [''],
     email: ['', {validators: [Validators.required, Validators.email]}],
     password: ['', {validators: [Validators.required]}],
-    confirmPassword: ['']
+    rePassword: ['', {validators: [Validators.required]}]
   });
 
   genderIcon: string = 'male';
@@ -57,6 +63,15 @@ export class FormComponent {
 
   ngOnInit() {
     this.setConditionalValidators();
+
+    if(this.model) {
+      this.form.patchValue({
+        name: this.model.name,
+        dateOfBirth: this.model.dateOfBirth,
+        gender: this.model.gender,
+        email: this.model.email
+      });
+    }
   }
 
   private setConditionalValidators() {
@@ -64,17 +79,17 @@ export class FormComponent {
       this.form.controls.name.setValidators([Validators.required]);
       this.form.controls.dateOfBirth.setValidators([Validators.required]);
       this.form.controls.gender.setValidators([Validators.required]);
-      this.form.controls.confirmPassword.setValidators([Validators.required]);
+      this.form.controls.rePassword.setValidators([Validators.required]);
 
       // Verify if confirm password field match with password field.
-      this.form.setValidators(matchValidator('password', 'confirmPassword'));
+      this.form.setValidators(matchValidator('password', 'rePassword'));
     }
 
     else {
       this.form.controls.name.setValidators(null);
       this.form.controls.dateOfBirth.setValidators(null);
       this.form.controls.gender.setValidators(null);
-      this.form.controls.confirmPassword.setValidators(null);
+      this.form.controls.rePassword.setValidators(null);
 
       this.form.clearValidators();
     }
@@ -148,7 +163,7 @@ export class FormComponent {
   }
 
   getErrorMessagesForConfirmPassword(): string {
-    let field = this.form.controls.confirmPassword;
+    let field = this.form.controls.rePassword;
 
     if(field.hasError('required'))
       return 'Confirmar a senha é obrigatório';
@@ -160,17 +175,11 @@ export class FormComponent {
   }
 
   saveChanges() {
-    if (!this.isLogin) {
-      const credentials: CreateUserDTO = {
-        name: this.form.value.name!,
-        dateOfBirth: new Date(this.form.value.dateOfBirth!),
-        gender: this.form.value.gender!,
-        email: this.form.value.email!,
-        password: this.form.value.password!,
-        rePassword: this.form.value.confirmPassword!,
-      };
+    if (!this.isLogin && !this.isEditProfile) {
+      const credentials = this.form.value as CreateUserDTO;
       this.registerForm.emit(credentials);
-  }
+    }
+
     else {
       const credentials = this.form.value as LoginDTO;
       this.loginForm.emit(credentials);

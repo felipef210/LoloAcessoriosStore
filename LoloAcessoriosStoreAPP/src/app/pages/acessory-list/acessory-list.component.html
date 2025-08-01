@@ -25,7 +25,13 @@
           <td>R${{ acessory.price | number:'1.2-2' }}</td>
           <td>
             <a [routerLink]="['/acessory/edit', acessory.id]" mat-icon-button style="background-color: blue;"><mat-icon>edit</mat-icon></a>
-            <button mat-icon-button style="background-color: red;" (click)="askDelete(acessory.id)"><mat-icon>cancel</mat-icon></button>
+            <button mat-icon-button
+              style="background-color: red;"
+              [swal]="{title: 'Confirmação', icon: 'question', text: 'Deseja deletar o acessório ' + `''` + acessory.name + `''?`, showCancelButton: true, confirmButtonText: 'Sim', cancelButtonText: 'Cancelar', customClass: {confirmButton: 'dialog-btn-confirm', cancelButton: 'dialog-btn-cancel'}}"
+              (confirm)="delete(acessory.id)"
+            >
+              <mat-icon>cancel</mat-icon>
+            </button>
           </td>
         </tr>
       }
@@ -44,8 +50,3 @@
     <app-footer></app-footer>
   </footer>
 </div>
-
-@if (showModal) {
-  <app-dialog [title]="'Excluir'" message="Tem certeza que deseja excluir ''{{ acessoryName }}'' ?" (confirm)="delete()" (cancel)="cancelDelete()"></app-dialog>
-}
-

@@ -13,11 +13,11 @@ import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { PaginationComponent } from "../../shared/components/pagination/pagination.component";
 import { FooterComponent } from "../../shared/components/footer/footer.component";
-import { DialogComponent } from "../../shared/components/dialog/dialog.component";
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 @Component({
   selector: 'app-acessory-list',
-  imports: [HeaderComponent, MatButtonModule, MatIconModule, RouterLink, DecimalPipe, PaginationComponent, FooterComponent, DialogComponent],
+  imports: [HeaderComponent, MatButtonModule, MatIconModule, RouterLink, DecimalPipe, PaginationComponent, FooterComponent, SweetAlert2Module],
   providers: [
     { provide: LOCALE_ID, useValue: 'pt-BR' }
   ],
@@ -57,28 +57,15 @@ export class AcessoryListComponent {
     this.getAcessories();
   }
 
-  askDelete(id: number) {
-    this.getAcessoryById(id);
-    this.deleteIdToConfirm = id;
-    this.showModal = true;
-    document.body.style.overflow = 'hidden';
-  }
-
-  delete() {
-    if(this.deleteIdToConfirm !== null)
-      this.acessoryService.deleteAcessory(this.deleteIdToConfirm).subscribe(() => {
-        this.resetModal();
+  delete(id: number) {
+    this.acessoryService.deleteAcessory(id).subscribe({
+      next: () => {
         this.getAcessories();
-      });
-  }
+      },
 
-  cancelDelete() {
-    this.resetModal();
-  }
-
-  resetModal() {
-    this.showModal = false;
-    this.deleteIdToConfirm = null;
-    document.body.style.overflow = '';
+      error: err => {
+        console.error('Ocorreu um erro');
+      }
+    });
   }
 }

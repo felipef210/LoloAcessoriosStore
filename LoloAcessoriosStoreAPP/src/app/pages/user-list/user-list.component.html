@@ -1,1 +1,44 @@
-<p>user-list works!</p>
+<div class="container">
+  <app-header></app-header>
+  <main>
+    <h1>Usuários</h1>
+
+    <table>
+      <tr>
+        <th style="width: 10%;">Nome</th>
+        <th style="width: 50%;">Email</th>
+        <th style="width: 20%;">Ações</th>
+      </tr>
+
+      @for (user of userList; track $index) {
+        <tr>
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td class="actionColumn">
+            <a [routerLink]="['/user/edit/admin/', user.email]" mat-icon-button style="background-color: blue;"><mat-icon>edit</mat-icon></a>
+            @if (user.isAdmin) {
+              <button style="background-color: green;" mat-flat-button (click)="openModal(user.email, 'removeAdmin')"><mat-icon>check</mat-icon>Admin</button>
+            }
+            @else {
+              <button style="background-color: red;"  mat-flat-button (click)="openModal(user.email, 'makeAdmin')"><mat-icon>cancel</mat-icon>Admin</button>
+            }
+
+          </td>
+        </tr>
+      }
+    </table>
+
+    <section class="pagination">
+      <app-pagination
+        [currentPage]="pagination.page"
+        [recordsPerPage]="pagination.recordsPerPage"
+        [totalRecords]="pagination.totalRecords || 0"
+        (pageChange)="onPageChange($event)"></app-pagination>
+    </section>
+  </main>
+
+  <footer>
+    <app-footer></app-footer>
+  </footer>
+</div>
+
