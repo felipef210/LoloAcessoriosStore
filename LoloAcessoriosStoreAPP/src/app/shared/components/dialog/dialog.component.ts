@@ -13,6 +13,12 @@ export class DialogComponent {
   @Input()
   message!: string;
 
+  @Input()
+  buttonText1!: string;
+
+  @Input()
+  buttonText2!: string;
+
   @Output()
   confirm = new EventEmitter<void>();
 

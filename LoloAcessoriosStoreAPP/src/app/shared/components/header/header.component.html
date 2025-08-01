@@ -12,7 +12,7 @@
         <mat-icon>keyboard_arrow_down</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item>Editar perfil</button>
+        <button mat-menu-item [routerLink]="['/user/edit', securityService.getJWTClaim('email')]">Editar perfil</button>
         <app-authorized role="admin">
           <ng-container authorized>
             <a routerLink="/acessories" mat-menu-item>Gerenciar estoque</a>

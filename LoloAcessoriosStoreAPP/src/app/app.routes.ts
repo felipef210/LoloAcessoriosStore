@@ -9,6 +9,9 @@ import { AcessoryListComponent } from './pages/acessory-list/acessory-list.compo
 import { UserListComponent } from './pages/user-list/user-list.component';
 import { isLoggedInGuard } from './shared/guards/is-logged-in.guard';
 import { CreateAcessoryComponent } from './pages/create-acessory/acessory-create.component';
+import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
+import { isLoggedOutGuard } from './shared/guards/is-logged-out.guard';
+import { EditProfileAsAdminComponent } from './pages/edit-profile-as-admin/edit-profile-as-admin.component';
 
 export const routes: Routes = [
   {path: '', component: CatalogComponent},
@@ -21,8 +24,9 @@ export const routes: Routes = [
   {path: 'acessory/:id', component: AcessoryDetailsComponent},
   {path: 'acessories', component: AcessoryListComponent, canActivate: [isAdminGuard]},
 
-
   {path: 'users', component: UserListComponent, canActivate: [isAdminGuard]},
+  {path: 'user/edit/:email', component: EditProfileComponent, canActivate: [isLoggedOutGuard]},
+  {path: 'user/edit/admin/:email', component: EditProfileAsAdminComponent, canActivate: [isAdminGuard]},
 
   {path: '**', redirectTo: ''}
 ];

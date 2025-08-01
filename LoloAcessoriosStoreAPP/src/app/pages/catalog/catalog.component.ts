@@ -9,10 +9,12 @@ import { HttpResponse } from '@angular/common/http';
 import { PaginationComponent } from "../../shared/components/pagination/pagination.component";
 import { FooterComponent } from "../../shared/components/footer/footer.component";
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-catalog',
-  imports: [HeaderComponent, SearchComponent, AcessoryCardComponent, PaginationComponent, FooterComponent, MatProgressSpinnerModule],
+  imports: [HeaderComponent, SearchComponent, AcessoryCardComponent, PaginationComponent, FooterComponent, MatProgressSpinnerModule, SweetAlert2Module],
   templateUrl: './catalog.component.html',
   styleUrl: './catalog.component.scss'
 })
@@ -72,5 +74,27 @@ export class CatalogComponent {
 
     else
       this.getAcessories();
+  }
+
+  deleteAcessory(id: number) {
+    Swal.fire({
+      title: 'Confirmação',
+      text: 'Deseja deletar esse acessório?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sim',
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        confirmButton: 'dialog-btn-confirm',
+        cancelButton: 'dialog-btn-cancel'
+      }
+    }).then(response => {
+      if (response.isConfirmed) {
+        this.acessoryService.deleteAcessory(id).subscribe(() => {
+          this.getAcessories();
+          Swal.fire('Deletado!', 'Acessório deletado com sucesso.', 'success');
+        });
+      }
+    });
   }
 }

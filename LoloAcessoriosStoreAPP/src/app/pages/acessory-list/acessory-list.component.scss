@@ -17,7 +17,7 @@ table {
     border: 2px solid #9B70E8;
   }
 
-  // Remove borda duplicada nas células internas
+  // Remove double borders from inside cells.
   td:not(:first-child),
   th:not(:first-child) {
     border-left: none;
@@ -28,7 +28,7 @@ table {
     border-top: none;
   }
 
-  // Cantos arredondados
+  // Rounded borders.
   tr:first-child th:first-child {
     border-top-left-radius: 1rem;
   }
@@ -46,6 +46,13 @@ table {
   }
 
   tr {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+
+    &:hover:not(:first-child) {
+      background-color: #f3e8ff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
     td {
       a, button {
         color: white;

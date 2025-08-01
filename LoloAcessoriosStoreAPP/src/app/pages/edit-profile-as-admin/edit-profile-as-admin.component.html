@@ -1,0 +1,14 @@
+<div class="container">
+  <app-header></app-header>
+
+  <main>
+    <h1>Editar perfil</h1>
+    @if (model) {
+      <app-form-edit-user [model]="model" [isAdmin]="true" (userFormAdmin)="saveChanges($event)" [errors]="errors"></app-form-edit-user>
+    }
+  </main>
+
+  <footer>
+    <app-footer></app-footer>
+  </footer>
+</div>

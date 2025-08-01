@@ -254,6 +254,27 @@
   },
   {
     "ContainingType": "AcessoriosStoreAPI.Controllers.UsersController",
+    "Method": "EditUserByAdmin",
+    "RelativePath": "api/Users/admin/edit-user/{email}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "AcessoriosStoreAPI.DTOs.UserDTOs.UserUpdateDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AcessoriosStoreAPI.Controllers.UsersController",
     "Method": "GetProfile",
     "RelativePath": "api/Users/admin/getuser/{email}",
     "HttpMethod": "GET",
@@ -269,6 +290,32 @@
     "ReturnTypes": [
       {
         "Type": "AcessoriosStoreAPI.DTOs.UserDTOs.UserProfileDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "AcessoriosStoreAPI.Controllers.UsersController",
+    "Method": "EditOwnProfile",
+    "RelativePath": "api/Users/edit-user",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "AcessoriosStoreAPI.DTOs.UserDTOs.UserUpdateOwnProfileDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "AcessoriosStoreAPI.DTOs.UserDTOs.AuthenticationResponseDTO",
         "MediaTypes": [
           "text/plain",
           "application/json",

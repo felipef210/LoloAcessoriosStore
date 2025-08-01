@@ -45,6 +45,8 @@ public class UsersController : ControllerBase
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ProjectTo<UserDTO>(_mapper.ConfigurationProvider)
+            .OrderByDescending(u => u.IsAdmin == true)
+            .OrderBy(u => u.Name)
             .ToListAsync();
 
         return items;
@@ -146,5 +148,92 @@ public class UsersController : ControllerBase
         var identityUser = await _userManager.FindByEmailAsync(user.Email!);
         await _userManager.RemoveClaimAsync(identityUser!, new Claim("isadmin", "true"));
         return NoContent();
+    }
+
+    [HttpPut("admin/edit-user/{email}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isadmin")]
+    public async Task<IActionResult> EditUserByAdmin(string email, [FromBody] UserUpdateDTO dto)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null) 
+            return NotFound("Usuário não encontrado.");
+
+        if (_context.Users.Any(u => u.Email == dto.Email) && email != dto.Email)
+            return ValidationProblem("E-mail já cadastrado.");
+
+        if (!_userService.IsFullName(dto.Name))
+            return ValidationProblem("Digite o seu nome completo.");
+
+        if (!_userService.GenderValidation(dto.Gender))
+            return ValidationProblem("Opção inválida, favor selecione uma das opções disponíveis.");
+
+        user.Name = dto.Name;
+        user.Email = dto.Email;
+
+        // Change password, but you don't need the old password because you are the admin.
+        if (!string.IsNullOrWhiteSpace(dto.NewPassword))
+        {
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, dto.NewPassword);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+        }
+
+        var updateResult = await _userManager.UpdateAsync(user);
+        if (!updateResult.Succeeded)
+            return BadRequest(updateResult.Errors);
+
+        return NoContent();
+    }
+
+    [HttpPut("edit-user")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<ActionResult<AuthenticationResponseDTO>> EditOwnProfile([FromBody] UserUpdateOwnProfileDTO dto)
+    {
+        var email = User.FindFirst("email")?.Value;
+        var user = await _userManager.FindByEmailAsync(email!);
+        if (user == null) 
+            return NotFound("Usuário não encontrado.");
+
+        if (_context.Users.Any(u => u.Email == dto.Email) && email != dto.Email)
+            return ValidationProblem("E-mail já cadastrado.");
+
+        if (!_userService.IsFullName(dto.Name))
+            return ValidationProblem("Digite o seu nome completo.");
+
+        if (!_userService.GenderValidation(dto.Gender))
+            return ValidationProblem("Opção inválida, favor selecione uma das opções disponíveis.");
+
+        dto.Name = _userService.CapitalizeFullName(dto.Name);
+        dto.Gender = _userService.CapitalizeFirstLetter(dto.Gender);
+
+        if (!string.IsNullOrWhiteSpace(dto.NewPassword))
+        {
+            if (string.IsNullOrWhiteSpace(dto.CurrentPassword))
+                return BadRequest("Senha atual obrigatória para trocar a senha.");
+
+            var checkPassword = await _userManager.CheckPasswordAsync(user, dto.CurrentPassword);
+            if (!checkPassword)
+                return BadRequest("Senha atual incorreta.");
+
+            if (!_userService.IsPasswordValid(dto.NewPassword))
+                return ValidationProblem("A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, um número e um caractere especial.");
+
+            var result = await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+        }
+
+        user.Name = dto.Name;
+        user.Gender = dto.Gender;
+        user.Email = dto.Email;
+
+        var updateResult = await _userManager.UpdateAsync(user);
+        if (!updateResult.Succeeded)
+            return BadRequest(updateResult.Errors);
+
+        var newToken = await _userService.BuildToken(user);
+
+        return Ok(newToken);
     }
 }

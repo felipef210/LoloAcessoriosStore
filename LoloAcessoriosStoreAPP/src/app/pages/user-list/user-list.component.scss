@@ -1,0 +1,79 @@
+h1 {
+  text-align: center;
+  color: #9B70E8;
+}
+
+table {
+  margin: 2rem auto;
+  width: 80%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 1rem;
+  overflow: hidden;
+
+  th, td {
+    text-align: center;
+    padding: 0.5rem;
+    border: 2px solid #9B70E8;
+  }
+
+  // Remove double borders from inside cells.
+  td:not(:first-child),
+  th:not(:first-child) {
+    border-left: none;
+  }
+
+  tr:not(:first-child) td,
+  tr:not(:first-child) th {
+    border-top: none;
+  }
+
+  // Rounded borders.
+  tr:first-child th:first-child {
+    border-top-left-radius: 1rem;
+  }
+
+  tr:first-child th:last-child {
+    border-top-right-radius: 1rem;
+  }
+
+  tr:last-child td:first-child {
+    border-bottom-left-radius: 1rem;
+  }
+
+  tr:last-child td:last-child {
+    border-bottom-right-radius: 1rem;
+  }
+
+  tr {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+
+    &:hover:not(:first-child) {
+      background-color: #f3e8ff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .actionColumn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    td {
+      a, button {
+        color: white;
+        border-radius: 1.5rem;
+      }
+
+      a {
+        margin-right: 0.5rem;
+      }
+
+      button {
+        margin-right: .5rem;
+
+      }
+    }
+  }
+}
+

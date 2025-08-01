@@ -26,12 +26,14 @@
     margin-top: 2rem;
 
     app-acessory-card {
-      transition: box-shadow .5s;
+      transition: .5s;
       overflow: visible;
       border-radius: .6rem;
 
+
       &:hover {
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        scale: 1.01;
       }
     }
   }

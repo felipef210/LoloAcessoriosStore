@@ -19,3 +19,22 @@ export interface UserProfileDTO {
   email: string,
   isAdmin: boolean
 }
+
+export interface UpdateOwnProfileDTO {
+  name: string,
+  gender: string,
+  email: string,
+  dateOfBirth: Date,
+  currentPassword?: string,
+  newPassword?: string,
+  rePassword?: string
+}
+
+export interface UpdateProfileDTO {
+  name: string,
+  gender: string,
+  email: string,
+  dateOfBirth: Date,
+  newPassword?: string,
+  rePassword?: string
+}
