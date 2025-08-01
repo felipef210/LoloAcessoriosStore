@@ -38,7 +38,6 @@ export class EditProfileAsAdminComponent {
   }
 
   saveChanges(dto: UpdateProfileDTO) {
-    console.log('Dados recebidos:', dto);
     const email = this.route.snapshot.paramMap.get('email');
     this.securityService.updateProfile(email!, dto).subscribe({
       next: () => {

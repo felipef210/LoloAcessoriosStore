@@ -38,15 +38,9 @@ export class SecurityService {
     return this.http.put<AuthenticationResponseDTO>(`${this.url}/edit-user`, user);
   }
 
-  updateProfile(email: string, user: UpdateProfileDTO): Observable<any> {
-  console.log('Preparando requisição updateProfile para:', `${this.url}/admin/edit-user/${email}`);
-  return this.http.put<any>(`${this.url}/admin/edit-user/${email}`, user).pipe(
-    tap({
-      next: () => console.log('Requisição enviada ao backend'),
-      error: err => console.log('Erro na requisição:', err)
-    })
-  );
-}
+  updateProfile(email: string, user: UpdateProfileDTO) {
+    return this.http.put(`${this.url}/admin/edit-user/${email}`, user)
+  }
 
   register(credentials: CreateUserDTO): Observable<AuthenticationResponseDTO> {
     return this.http.post<AuthenticationResponseDTO>(`${this.url}/register`, credentials)

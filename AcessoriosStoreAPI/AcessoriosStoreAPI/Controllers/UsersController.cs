@@ -155,10 +155,10 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> EditUserByAdmin(string email, [FromBody] UserUpdateDTO dto)
     {
         var user = await _userManager.FindByEmailAsync(email);
-        if (user == null) 
+        if (user == null)
             return NotFound("Usuário não encontrado.");
 
-        if (_context.Users.Any(u => u.Email == dto.Email) && email != dto.Email)
+        if (_context.Users.Any(u => u.Email == dto.Email && u.Email != email))
             return ValidationProblem("E-mail já cadastrado.");
 
         if (!_userService.IsFullName(dto.Name))
@@ -168,22 +168,32 @@ public class UsersController : ControllerBase
             return ValidationProblem("Opção inválida, favor selecione uma das opções disponíveis.");
 
         user.Name = dto.Name;
-        user.Email = dto.Email;
+        user.Gender = dto.Gender;
 
-        // Change password, but you don't need the old password because you are the admin.
+        if (user.Email != dto.Email)
+        {
+            var emailResult = await _userManager.SetEmailAsync(user, dto.Email);
+            if (!emailResult.Succeeded)
+                return BadRequest(emailResult.Errors);
+
+            var usernameResult = await _userManager.SetUserNameAsync(user, dto.Email);
+            if (!usernameResult.Succeeded)
+                return BadRequest(usernameResult.Errors);
+        }
+
         if (!string.IsNullOrWhiteSpace(dto.NewPassword))
         {
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var result = await _userManager.ResetPasswordAsync(user, token, dto.NewPassword);
-            if (!result.Succeeded)
-                return BadRequest(result.Errors);
+            var resetResult = await _userManager.ResetPasswordAsync(user, token, dto.NewPassword);
+            if (!resetResult.Succeeded)
+                return BadRequest(resetResult.Errors);
         }
 
         var updateResult = await _userManager.UpdateAsync(user);
         if (!updateResult.Succeeded)
             return BadRequest(updateResult.Errors);
 
-        return NoContent();
+        return Ok(dto);
     }
 
     [HttpPut("edit-user")]
