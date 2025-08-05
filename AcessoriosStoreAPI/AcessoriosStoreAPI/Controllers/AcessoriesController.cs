@@ -146,11 +146,27 @@ public class AcessoriesController : ControllerBase
         // -------------File managment-------------
         var folderName = acessory.Name;
 
+        for (int i = 0; i < acessoryUpdateDTO.ExistingPictures.Count; i++)
+        {
+            var url = acessoryUpdateDTO.ExistingPictures[i];
+            var picture = acessory.Pictures.FirstOrDefault(p => p.Url == url);
+            if (picture != null)
+            {
+                picture.Order = i;
+
+                if (picture.Order != i)
+                {
+                    picture.Order = i;
+                    _context.Entry(picture).Property(p => p.Order).IsModified = true;
+                }
+            }
+        }
+
         var picturesToRemove = acessory.Pictures
             .Where(p => !acessoryUpdateDTO.ExistingPictures.Contains(p.Url))
             .ToList();
 
-        foreach ( var picture in picturesToRemove)
+        foreach (var picture in picturesToRemove)
         {
             await _fileStorage.Delete(picture.Url, folderName, _container);
             _context.AcessoryPictures.Remove(picture);
@@ -160,8 +176,17 @@ public class AcessoriesController : ControllerBase
         if (acessoryUpdateDTO.NewPictures?.Any() == true)
         {
             var urls = await _fileStorage.Store(_container, folderName, acessoryUpdateDTO.NewPictures);
+
+            int startingOrder = acessory.Pictures.Count;
+
             foreach (var url in urls)
-                acessory.Pictures.Add(new AcessoryPicture { Url = url });
+            {
+                acessory.Pictures.Add(new AcessoryPicture
+                {
+                    Url = url,
+                    Order = startingOrder++
+                });
+            }
         }
         // ---------------------------------------
 

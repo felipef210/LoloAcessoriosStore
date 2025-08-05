@@ -10,6 +10,7 @@ public class AcessoryPicture
     public int Id { get; set; }
     [Required]
     public string Url { get; set; } = string.Empty;
+    public int Order { get; set; }
     public int AcessoryId { get; set; }
     public Acessory Acessory { get; set; } = null!;
 }

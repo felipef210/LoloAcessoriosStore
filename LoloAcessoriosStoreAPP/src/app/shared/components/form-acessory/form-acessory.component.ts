@@ -163,14 +163,25 @@ export class FormAcessoryComponent implements OnInit {
     this.markFormAsDirty();
   }
 
-  setMainImage(index: number): void {
-    if (!this.imageBase64 || !this.selectedFiles) return;
+  setMainImage(index: number) {
+    if (this.isCreation) {
+      if (!this.imageBase64 || !this.selectedFiles) return;
 
-    const base64Main = this.imageBase64.splice(index, 1)[0];
-    this.imageBase64.unshift(base64Main);
+      const base64Main = this.imageBase64.splice(index, 1)[0];
+      this.imageBase64.unshift(base64Main);
 
-    const fileMain = this.selectedFiles.splice(index, 1)[0];
-    this.selectedFiles.unshift(fileMain);
+      const fileMain = this.selectedFiles.splice(index, 1)[0];
+      this.selectedFiles.unshift(fileMain);
+    }
+
+    else {
+      if (!this.imageUrls) return;
+
+      const mainImage = this.imageUrls.splice(index, 1)[0];
+      this.imageUrls.unshift(mainImage);
+
+      this.markFormAsDirty();
+    }
 
     this.selectedImageIndex = 0;
   }
