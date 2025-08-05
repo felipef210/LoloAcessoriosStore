@@ -1,6 +1,6 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { AcessoryService } from '../../core/services/acessory.service';
-import { AcessoryDTO, CreateAcessoryDTO } from '../../core/interfaces/acessory.models';
+import { AcessoryDTO, CreateAcessoryDTO, UpdateAcessoryDTO } from '../../core/interfaces/acessory.models';
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { FormAcessoryComponent } from "../../shared/components/form-acessory/form-acessory.component";
 import { FooterComponent } from "../../shared/components/footer/footer.component";
@@ -31,7 +31,7 @@ export class AcessoryEditComponent implements OnInit {
     })
   }
 
-  onSubmit(dto: CreateAcessoryDTO) {
+  onSubmit(dto: UpdateAcessoryDTO) {
     this.acessoryService.updateAcessory(this.id, dto).subscribe({
       next: () => {
         this.router.navigate(['/acessories'])

@@ -25,7 +25,7 @@
   <div class="picture-column">
     <div class="picture-area">
       <h3>Adicionar Imagens</h3>
-      @if (!imageBase64) {
+      @if (!imageBase64 || imageBase64.length === 0) {
         <figure>
           <img src="camera.jpg" (click)="fileInput.click()"/>
           <input
@@ -51,41 +51,56 @@
             }
           </figure>
 
-          <div cdkDropList (cdkDropListDropped)="drop($event)" class="thumbnail-list">
+          <div class="thumbnail-list">
             @if (isCreation) {
               @for (image of imageBase64; track $index) {
-                <img
-                  cdkDrag
-                  [src]="image"
-                  [class.selected]="$index === selectedImageIndex"
-                  (click)="setMainImage($index)"
-                  class="thumbnail"
-                />
+                <div class="thumbnail-wrapper">
+                  <img
+                    [src]="image"
+                    [class.selected]="$index === selectedImageIndex"
+                    (click)="setMainImage($index)"
+                    class="thumbnail"
+                  />
+                  <button class="delete-btn" (click)="removeNewImage($index)" type="button">×</button>
+                </div>
               }
             }
 
             @else {
               @for (url of imageUrls; track $index) {
-                <img
-                  cdkDrag
-                  [src]="url"
-                  [class.selected]="$index === selectedImageIndex"
-                  (click)="setMainImage($index)"
-                  class="thumbnail"
-                />
+                <div class="thumbnail-wrapper">
+                  <img
+                    [src]="url"
+                    [class.selected]="$index === selectedImageIndex"
+                    (click)="setMainImage($index)"
+                    class="thumbnail"
+                  />
+                  <button class="delete-btn" (click)="removeExistingImage($index)" type="button">×</button>
+                </div>
               }
             }
+            <figure class="thumbnail add-thumbnail">
+              <img src="camera.jpg" (click)="fileInput.click()" />
+              <input
+                type="file"
+                accept="image/*"
+                (change)="onImageSelected($event)"
+                multiple
+                class="btn-image-input"
+                #fileInput
+              />
+            </figure>
           </div>
         </div>
       }
     </div>
 
     @if (isCreation) {
-      <button mat-raised-button [disabled]="form.invalid"><mat-icon>save</mat-icon>Adicionar acessório</button>
+      <button mat-raised-button [disabled]="form.invalid" type="submit"><mat-icon>save</mat-icon>Adicionar acessório</button>
     }
 
     @else {
-      <button mat-raised-button [disabled]="form.invalid"><mat-icon>save</mat-icon>Salvar alterações</button>
+      <button mat-raised-button [disabled]="form.invalid || form.pristine" type="submit"><mat-icon>save</mat-icon>Salvar alterações</button>
     }
     <a routerLink="/acessories" mat-raised-button><mat-icon>cancel</mat-icon>Cancelar</a>
   </div>

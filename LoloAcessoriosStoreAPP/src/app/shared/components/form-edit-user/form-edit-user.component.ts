@@ -4,10 +4,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { UpdateOwnProfileDTO, UpdateProfileDTO, UserProfileDTO } from '../../../core/interfaces/user.models';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { matchValidator } from '../../functions/matchValidator';
+import { DisplayErrorsComponent } from "../display-errors/display-errors.component";
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-form-edit-user',
-  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule, MatSlideToggleModule],
+  imports: [ReactiveFormsModule, MatIconModule, MatButtonModule, MatSlideToggleModule, MatFormFieldModule, DisplayErrorsComponent, RouterLink],
   templateUrl: './form-edit-user.component.html',
   styleUrl: './form-edit-user.component.scss'
 })
@@ -37,7 +41,6 @@ export class FormEditUserComponent implements OnInit {
     currentPassword: [''],
     newPassword: [''],
     rePassword: [''],
-    isEnabled: new FormControl<Boolean>(false)
   });
 
   menu: string = 'personal';
@@ -49,6 +52,22 @@ export class FormEditUserComponent implements OnInit {
       gender: this.model.gender,
       dateOfBirth: this.formatDate(this.model.dateOfBirth)
     });
+
+    this.form.setValidators(matchValidator('newPassword', 'rePassword'));
+
+    if (!this.isAdmin) {
+      this.form.controls.newPassword.valueChanges.subscribe(newPasswordValue => {
+        const currentPasswordControl = this.form.controls.currentPassword;
+
+        if (newPasswordValue)
+          currentPasswordControl.addValidators(Validators.required);
+
+        else
+          currentPasswordControl.removeValidators(Validators.required);
+
+        currentPasswordControl.updateValueAndValidity();
+      });
+    }
   }
 
   private formatDate(date: string | Date): string {
@@ -61,9 +80,6 @@ export class FormEditUserComponent implements OnInit {
 
   changeMenu(menuType: string): void {
     this.menu = menuType;
-
-    if(this.menu == 'personal')
-      this.form.get('isEnabled')?.setValue(false);
   }
 
   saveChanges() {
@@ -87,6 +103,54 @@ export class FormEditUserComponent implements OnInit {
         this.userForm.emit(ownDto);
       }
     }
+  }
+
+  getErrorMessagesForName(): string {
+    let field = this.form.controls.name;
+
+    if(field.hasError('required'))
+      return 'O nome é obrigatório';
+
+    return '';
+  }
+
+  getErrorMessagesForGender(): string {
+    let field = this.form.controls.gender;
+
+    if(field.hasError('required'))
+      return 'O gênero é obrigatório';
+
+    return '';
+  }
+
+  getErrorMessagesForEmail(): string {
+    let field = this.form.controls.email;
+
+    if(field.hasError('required'))
+      return 'O e-mail é obrigatório';
+
+    if(field.hasError('email'))
+      return 'E-mail inválido';
+
+    return '';
+  }
+
+  getErrorMessagesForPassword(): string {
+    let field = this.form.controls.currentPassword;
+
+    if(field.hasError('required'))
+      return 'Digite a sua senha atual';
+
+    return '';
+  }
+
+  getErrorMessagesForConfirmPassword(): string {
+    let field = this.form.controls.rePassword;
+
+    if(field.hasError('mustMatch'))
+      return 'As senhas devem coincidir';
+
+    return '';
   }
 
 }

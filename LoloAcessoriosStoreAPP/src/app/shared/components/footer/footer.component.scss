@@ -110,3 +110,8 @@ footer {
     text-align: center;
   }
 }
+
+footer a {
+  user-select: none;
+  -webkit-user-select: none;
+}

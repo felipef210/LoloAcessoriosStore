@@ -1,8 +1,8 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { AcessoryDTO, CreateAcessoryDTO, FilterAcessoryDTO } from '../interfaces/acessory.models';
+import { AcessoryDTO, CreateAcessoryDTO, FilterAcessoryDTO, UpdateAcessoryDTO } from '../interfaces/acessory.models';
 import { PaginationDTO } from '../interfaces/paginationDTO';
 import { buildQueryParams } from '../../shared/functions/buildQueryParams';
 
@@ -38,9 +38,9 @@ export class AcessoryService {
     return this.http.post<CreateAcessoryDTO>(this.url, formData);
   }
 
-  public updateAcessory(id: number, acessory: CreateAcessoryDTO): Observable<CreateAcessoryDTO> {
-    const formData = this.buildFormData(acessory);
-    return this.http.put<CreateAcessoryDTO>(`${this.url}/${id}`, formData);
+  public updateAcessory(id: number, acessory: UpdateAcessoryDTO): Observable<UpdateAcessoryDTO> {
+    const formData = this.buildFormDataToUpdateAcessory(acessory);
+    return this.http.put<UpdateAcessoryDTO>(`${this.url}/${id}`, formData);
   }
 
   public deleteAcessory(id: number) {
@@ -54,8 +54,29 @@ export class AcessoryService {
     formData.append('price', acessory.price.toString().replace(',', '.'));
     formData.append('category', acessory.category);
     formData.append('description', acessory.description);
+    formData.append('lastUpdate', acessory.lastUpdate.toISOString());
     acessory.pictures.forEach(file => {
       formData.append('pictures', file);
+    });
+
+    return formData;
+  }
+
+  private buildFormDataToUpdateAcessory(acessory: UpdateAcessoryDTO): FormData {
+    const formData = new FormData();
+
+    formData.append('name', acessory.name);
+    formData.append('price', acessory.price.toString().replace(',', '.'));
+    formData.append('category', acessory.category);
+    formData.append('description', acessory.description);
+    formData.append('lastUpdate', acessory.lastUpdate.toISOString());
+
+    acessory.existingPictures.forEach(url => {
+      formData.append('existingPictures', url);
+    });
+
+    acessory.newPictures.forEach(file => {
+      formData.append('NewPictures', file);
     });
 
     return formData;

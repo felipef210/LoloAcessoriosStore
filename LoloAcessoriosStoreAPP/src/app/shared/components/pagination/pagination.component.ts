@@ -46,10 +46,12 @@ export class PaginationComponent {
   }
 
   firstPage() {
-    this.pageChange.emit(1);
+    if (this.currentPage > 1)
+      this.pageChange.emit(1);
   }
 
   lastPage() {
-    this.pageChange.emit(this.totalPages);
+    if (this.currentPage < this.totalPages)
+      this.pageChange.emit(this.totalPages);
   }
 }

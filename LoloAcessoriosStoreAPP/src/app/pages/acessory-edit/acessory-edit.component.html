@@ -6,7 +6,7 @@
     <h4>Preencha os detalhes do seu acessório</h4>
 
     @if (acessoryModel) {
-      <app-form-acessory [model]="acessoryModel" [isCreation]="creation" (acessoryForm)="onSubmit($event)"></app-form-acessory>
+      <app-form-acessory [model]="acessoryModel" [isCreation]="creation" (acessoryUpdateForm)="onSubmit($event)"></app-form-acessory>
     }
   </main>
 

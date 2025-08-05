@@ -118,7 +118,7 @@ export class FormComponent {
     let field = this.form.controls.name;
 
     if(field.hasError('required'))
-      return 'O nome é brigatório';
+      return 'O nome é obrigatório';
 
     return '';
   }

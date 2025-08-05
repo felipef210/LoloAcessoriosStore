@@ -17,6 +17,16 @@ export interface CreateAcessoryDTO {
   lastUpdate: Date
 }
 
+export interface UpdateAcessoryDTO {
+  name: string;
+  price: number;
+  description: string;
+  category: string;
+  existingPictures: string[];
+  newPictures: File[];
+  lastUpdate: Date;
+}
+
 export interface FilterAcessoryDTO {
   name?: string,
   orderBy?: string,

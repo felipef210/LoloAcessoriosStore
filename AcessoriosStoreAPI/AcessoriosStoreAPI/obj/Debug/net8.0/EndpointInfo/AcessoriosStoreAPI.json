@@ -203,14 +203,6 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          {
-            "name": "pictureId",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
           }
         ],
         "requestBody": {
@@ -239,11 +231,17 @@
                   "Category": {
                     "type": "string"
                   },
-                  "Pictures": {
+                  "NewPictures": {
                     "type": "array",
                     "items": {
                       "type": "string",
                       "format": "binary"
+                    }
+                  },
+                  "ExistingPictures": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
                     }
                   },
                   "LastUpdate": {
@@ -265,7 +263,10 @@
                 "Category": {
                   "style": "form"
                 },
-                "Pictures": {
+                "NewPictures": {
+                  "style": "form"
+                },
+                "ExistingPictures": {
                   "style": "form"
                 },
                 "LastUpdate": {

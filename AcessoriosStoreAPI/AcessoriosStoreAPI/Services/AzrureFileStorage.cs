@@ -54,6 +54,19 @@ public class AzureFileStorage : IFileStorage
         await blob.DeleteIfExistsAsync();
     }
 
+    public async Task DeleteFolder(string folderName, string container)
+    {
+        var client = new BlobContainerClient(connectionString, container);
+        await client.CreateIfNotExistsAsync();
+
+        var sanitizedFolder = Sanitize(folderName);
+        await foreach (var blobItem in client.GetBlobsAsync(prefix: sanitizedFolder + "/"))
+        {
+            var blobClient = client.GetBlobClient(blobItem.Name);
+            await blobClient.DeleteIfExistsAsync();
+        }
+    }
+
     public static string Sanitize(string input)
     {
         return string.Concat(input

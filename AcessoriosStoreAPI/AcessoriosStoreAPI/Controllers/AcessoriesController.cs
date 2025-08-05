@@ -91,6 +91,7 @@ public class AcessoriesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isadmin")]
     public async Task<ActionResult<AcessoryDTO>> Post([FromForm] AcessoryCreationDTO acessoryCreationDTO)
     {
         acessoryCreationDTO.Name = _acessoryService.CapitalizeFirstLetter(acessoryCreationDTO.Name);
@@ -119,8 +120,10 @@ public class AcessoriesController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Put(int id, [FromQuery] int? pictureId, [FromForm] AcessoryCreationDTO acessoryUpdateDTO)
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isadmin")]
+    public async Task<IActionResult> Put(int id, [FromForm] AcessoryUpdateDTO acessoryUpdateDTO)
     {
+        // -------------Normal fields-------------
         var acessory = await _context.Acessories
             .Include(a => a.Pictures)
             .FirstOrDefaultAsync(a => a.Id == id);
@@ -138,42 +141,36 @@ public class AcessoriesController : ControllerBase
             return BadRequest("Categoria não existe no contexto.");
 
         acessory = _mapper.Map(acessoryUpdateDTO, acessory);
+        // ---------------------------------------
+
+        // -------------File managment-------------
         var folderName = acessory.Name;
 
-        if (acessoryUpdateDTO.Pictures != null)
+        var picturesToRemove = acessory.Pictures
+            .Where(p => !acessoryUpdateDTO.ExistingPictures.Contains(p.Url))
+            .ToList();
+
+        foreach ( var picture in picturesToRemove)
         {
-            if (pictureId.HasValue)
-            {
-                var picture = await _context.AcessoryPictures.FirstOrDefaultAsync(p => p.Id == pictureId.Value);
-
-                if (picture != null)
-                {
-                    await _fileStorage.Delete(picture.Url, folderName, _container);
-
-                    _context.AcessoryPictures.Remove(picture);
-
-                    var urls = await _fileStorage.Store(_container, folderName, acessoryUpdateDTO.Pictures);
-                    foreach (var url in urls)
-                    {
-                        acessory.Pictures.Add(new AcessoryPicture { Url = url });
-                    }
-                }
-            }
-            else
-            {
-                var urls = await _fileStorage.Store(_container, folderName, acessoryUpdateDTO.Pictures);
-                foreach (var url in urls)
-                {
-                    acessory.Pictures.Add(new AcessoryPicture { Url = url });
-                }
-            }
+            await _fileStorage.Delete(picture.Url, folderName, _container);
+            _context.AcessoryPictures.Remove(picture);
         }
+
+        // Add new file If there is any new file in the form
+        if (acessoryUpdateDTO.NewPictures?.Any() == true)
+        {
+            var urls = await _fileStorage.Store(_container, folderName, acessoryUpdateDTO.NewPictures);
+            foreach (var url in urls)
+                acessory.Pictures.Add(new AcessoryPicture { Url = url });
+        }
+        // ---------------------------------------
 
         await _context.SaveChangesAsync();
         return NoContent();
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isadmin")]
     public async Task<IActionResult> Delete(int id)
     {
         var acessory = await _context.Acessories
@@ -189,6 +186,8 @@ public class AcessoriesController : ControllerBase
         {
             await _fileStorage.Delete(picture.Url, folderName, _container);
         }
+
+        await _fileStorage.DeleteFolder(folderName, _container);
 
         _context.Remove(acessory);
         await _context.SaveChangesAsync();

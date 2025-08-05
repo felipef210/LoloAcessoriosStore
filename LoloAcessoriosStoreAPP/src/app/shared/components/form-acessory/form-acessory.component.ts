@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
-import { AcessoryDTO, CreateAcessoryDTO } from '../../../core/interfaces/acessory.models';
+import { AcessoryDTO, CreateAcessoryDTO, UpdateAcessoryDTO } from '../../../core/interfaces/acessory.models';
 import { CdkDragDrop, DragDropModule, moveItemInArray  } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -32,6 +32,9 @@ export class FormAcessoryComponent implements OnInit {
   @Output()
   acessoryForm = new EventEmitter<CreateAcessoryDTO>();
 
+  @Output()
+  acessoryUpdateForm = new EventEmitter<UpdateAcessoryDTO>();
+
   private formBuilder = inject(FormBuilder);
 
   form = this.formBuilder.group({
@@ -39,7 +42,7 @@ export class FormAcessoryComponent implements OnInit {
     price: ['', {validators:[Validators.required, Validators.min(0)]}],
     category: ['', {validators:[Validators.required]}],
     description: [''],
-    pictures: new FormControl<File[] | null>(null, {validators: [Validators.required]}),
+    pictures: new FormControl<File[] | null>(null),
     lastUpdate: [new Date()]
   });
 
@@ -48,16 +51,6 @@ export class FormAcessoryComponent implements OnInit {
       this.imageUrls = this.model.pictures;
       if (this.model.pictures && this.model.pictures.length > 0) {
         this.imageBase64 = this.model.pictures;
-
-        // Converter URLs para File[] e adicionar ao form
-        Promise.all(
-          this.model.pictures.map((url, index) =>
-            this.urlToFile(url, `imagem-${index}.jpg`)
-          )
-        ).then((files: File[]) => {
-          const currentPictures = this.form.controls.pictures.value || [];
-          this.form.controls.pictures.setValue([...currentPictures, ...files]);
-        });
       }
 
       this.form.patchValue({
@@ -65,17 +58,19 @@ export class FormAcessoryComponent implements OnInit {
         price: this.model.price.toString(),
         category: this.model.category,
         description: this.model.description,
-        lastUpdate: new Date(this.model.lastUpdate),
-        pictures: this.selectedFiles
+        lastUpdate: new Date(this.model.lastUpdate)
       });
 
-      console.log(this.form.value);
+      if (this.isCreation) {
+        this.form.controls.pictures.setValidators([Validators.required]);
+        this.form.controls.pictures.updateValueAndValidity();
+      }
     }
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.imageUrls, event.previousIndex, event.currentIndex);
-    this.selectedImageIndex = 0;
+  markFormAsDirty() {
+    this.form.markAsDirty();
+    this.form.updateValueAndValidity();
   }
 
   getErrorMessagesForName(): string {
@@ -103,23 +98,69 @@ export class FormAcessoryComponent implements OnInit {
     const input = event.target as HTMLInputElement;
 
     if (input.files && input.files.length > 0) {
-      const files: File[] = Array.from(input.files);
-      this.form.patchValue({pictures: files});
-      this.selectedFiles = files;
-      this.imageBase64 = [];
+      const newFiles: File[] = Array.from(input.files);
 
-      files.forEach((file, index) => {
+      // Join the old files with the new one.
+      this.selectedFiles = [...newFiles, ...this.selectedFiles];
+
+      // Update the form with the full list of the pictures.
+      this.form.controls.pictures.setValue(this.selectedFiles);
+      this.form.controls.pictures.markAsDirty();
+      this.form.controls.pictures.updateValueAndValidity();
+
+      if (!this.imageBase64) {
+        this.imageBase64 = [];
+      }
+
+      newFiles.forEach((file, i) => {
         this.toBase64(file)
           .then((value: string) => {
-            this.imageBase64![index] = value;
+            this.imageBase64!.push(value);
 
-            if (index === 0) {
-              this.previewImage = value;
-            }
+            if (i === 0)
+            this.selectedImageIndex = this.imageBase64!.length - 1;
+
           })
           .catch(error => console.error(error));
       });
+
+      this.selectedImageIndex = this.imageBase64.length - newFiles.length;
     }
+  }
+
+  removeNewImage(index: number): void {
+    if (!this.imageBase64 || index >= this.selectedFiles.length) return;
+
+    this.imageBase64.splice(index, 1);
+
+    if (index < this.selectedFiles.length) {
+      this.selectedFiles.splice(index, 1);
+    }
+
+    this.form.controls.pictures.setValue(this.selectedFiles);
+    this.form.controls.pictures.markAsDirty();
+    this.form.controls.pictures.updateValueAndValidity();
+
+    if (this.selectedImageIndex >= this.imageBase64.length) {
+      this.selectedImageIndex = this.imageBase64.length - 1;
+    }
+
+    this.markFormAsDirty();
+  }
+
+  removeExistingImage(index: number): void {
+    if (!this.imageUrls || index >= this.imageUrls.length) return;
+
+    this.imageUrls.splice(index, 1);
+
+    if (this.imageBase64) {
+      this.imageBase64.splice(index, 1);
+    }
+
+    if (this.selectedImageIndex >= this.imageUrls.length)
+      this.selectedImageIndex = this.imageUrls.length - 1;
+
+    this.markFormAsDirty();
   }
 
   setMainImage(index: number): void {
@@ -143,25 +184,36 @@ export class FormAcessoryComponent implements OnInit {
     });
   }
 
-  private async urlToFile(url: string, filename: string): Promise<File> {
-    const response = await fetch(url);
-    const blob = await response.blob();
-    return new File([blob], filename, { type: blob.type });
-  }
-
   saveChanges() {
     if (this.form.invalid || !this.imageBase64) return;
 
     const rawValue = this.form.getRawValue();
 
-    const acessory: CreateAcessoryDTO = {
-      name: rawValue.name!,
-      price: parseFloat(rawValue.price as string),
-      description: rawValue.description || '',
-      category: rawValue.category!,
-      pictures: rawValue.pictures || [],
-      lastUpdate: new Date()
-    };
-    this.acessoryForm.emit(acessory);
+    if (this.isCreation) {
+      const acessory: CreateAcessoryDTO = {
+        name: rawValue.name!,
+        price: parseFloat(rawValue.price as string),
+        description: rawValue.description || '',
+        category: rawValue.category!,
+        pictures: rawValue.pictures || [],
+        lastUpdate: new Date()
+      };
+
+      this.acessoryForm.emit(acessory);
+    }
+
+    else {
+      const acessory: UpdateAcessoryDTO = {
+        name: rawValue.name!,
+        price: parseFloat(rawValue.price as string),
+        description: rawValue.description || '',
+        category: rawValue.category!,
+        existingPictures: this.imageUrls || [],
+        newPictures: this.selectedFiles || [],
+        lastUpdate: new Date()
+      }
+
+      this.acessoryUpdateForm.emit(acessory);
+    }
   }
 }
