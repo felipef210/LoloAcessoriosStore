@@ -20,7 +20,7 @@ public class AutoMapperProfiles : Profile
 
         CreateMap<Acessory, AcessoryDTO>()
             .ForMember(dest => dest.Pictures, opt => opt.MapFrom(src =>
-                src.Pictures.Select(p => p.Url).ToList()));
+                src.Pictures.OrderBy(p => p.Order).Select(p => p.Url).ToList()));
 
         CreateMap<AcessoryUpdateDTO, Acessory>().
             ForMember(dest => dest.Pictures, opt => opt.Ignore());

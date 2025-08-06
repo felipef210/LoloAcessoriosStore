@@ -101,30 +101,21 @@ export class FormAcessoryComponent implements OnInit {
       const newFiles: File[] = Array.from(input.files);
 
       // Join the old files with the new one.
-      this.selectedFiles = [...newFiles, ...this.selectedFiles];
+      this.selectedFiles.unshift(...newFiles);
 
       // Update the form with the full list of the pictures.
       this.form.controls.pictures.setValue(this.selectedFiles);
       this.form.controls.pictures.markAsDirty();
       this.form.controls.pictures.updateValueAndValidity();
 
-      if (!this.imageBase64) {
-        this.imageBase64 = [];
-      }
+      const base64Promises = newFiles.map(file => this.toBase64(file));
 
-      newFiles.forEach((file, i) => {
-        this.toBase64(file)
-          .then((value: string) => {
-            this.imageBase64!.push(value);
-
-            if (i === 0)
-            this.selectedImageIndex = this.imageBase64!.length - 1;
-
-          })
-          .catch(error => console.error(error));
-      });
-
-      this.selectedImageIndex = this.imageBase64.length - newFiles.length;
+      Promise.all(base64Promises)
+        .then((base64Images: string[]) => {
+          this.imageBase64 = [...base64Images, ...(this.imageBase64 || [])];
+          this.selectedImageIndex = 0;
+        })
+        .catch(error => console.error('Erro ao converter imagens:', error));
     }
   }
 
@@ -171,6 +162,7 @@ export class FormAcessoryComponent implements OnInit {
       this.imageBase64.unshift(base64Main);
 
       const fileMain = this.selectedFiles.splice(index, 1)[0];
+      console.log(this.selectedFiles);
       this.selectedFiles.unshift(fileMain);
     }
 

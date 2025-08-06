@@ -109,7 +109,13 @@ public class AcessoriesController : ControllerBase
         if (acessoryCreationDTO.Pictures is not null)
         {
             var urls = await _fileStorage.Store(_container, folderName, acessoryCreationDTO.Pictures);
-            acessory.Pictures = urls.Select(url => new AcessoryPicture { Url = url }).ToList();
+
+            acessory.Pictures = urls.Select((url, index) => new AcessoryPicture
+            {
+                Url = url,
+                Order = index,
+                Acessory = acessory
+            }).ToList();
         }
 
         _context.Add(acessory);
@@ -143,25 +149,22 @@ public class AcessoriesController : ControllerBase
         acessory = _mapper.Map(acessoryUpdateDTO, acessory);
         // ---------------------------------------
 
-        // -------------File managment-------------
+        // -------------File management-------------
         var folderName = acessory.Name;
 
+        // Update the order of the already existing pictures
         for (int i = 0; i < acessoryUpdateDTO.ExistingPictures.Count; i++)
         {
             var url = acessoryUpdateDTO.ExistingPictures[i];
             var picture = acessory.Pictures.FirstOrDefault(p => p.Url == url);
-            if (picture != null)
+            if (picture != null && picture.Order != i)
             {
                 picture.Order = i;
-
-                if (picture.Order != i)
-                {
-                    picture.Order = i;
-                    _context.Entry(picture).Property(p => p.Order).IsModified = true;
-                }
+                _context.Entry(picture).Property(p => p.Order).IsModified = true;
             }
         }
 
+        // Delete the old pictures
         var picturesToRemove = acessory.Pictures
             .Where(p => !acessoryUpdateDTO.ExistingPictures.Contains(p.Url))
             .ToList();
@@ -172,19 +175,21 @@ public class AcessoriesController : ControllerBase
             _context.AcessoryPictures.Remove(picture);
         }
 
-        // Add new file If there is any new file in the form
+        
         if (acessoryUpdateDTO.NewPictures?.Any() == true)
         {
             var urls = await _fileStorage.Store(_container, folderName, acessoryUpdateDTO.NewPictures);
 
-            int startingOrder = acessory.Pictures.Count;
+            // New order for the pictures after the existing one
+            int startingOrder = acessoryUpdateDTO.ExistingPictures.Count;
 
             foreach (var url in urls)
             {
                 acessory.Pictures.Add(new AcessoryPicture
                 {
                     Url = url,
-                    Order = startingOrder++
+                    Order = startingOrder++,
+                    AcessoryId = acessory.Id
                 });
             }
         }
@@ -193,6 +198,7 @@ public class AcessoriesController : ControllerBase
         await _context.SaveChangesAsync();
         return NoContent();
     }
+
 
     [HttpDelete("{id:int}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isadmin")]

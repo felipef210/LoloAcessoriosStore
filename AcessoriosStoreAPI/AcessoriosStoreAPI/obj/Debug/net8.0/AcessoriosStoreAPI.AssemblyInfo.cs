@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AcessoriosStoreAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+21a51aa6b83ee1f4ea89c2ce9763638050609aa4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+55f97d0fb3e51b658bfa4e8aeab8965feb215ed9")]
 [assembly: System.Reflection.AssemblyProductAttribute("AcessoriosStoreAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AcessoriosStoreAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

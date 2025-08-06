@@ -43,7 +43,7 @@
         <div class="image-preview-area">
           <figure class="main-image">
             @if (isCreation) {
-              <img [src]="imageBase64[0]" alt="Imagem principal" />
+              <img [src]="imageBase64[selectedImageIndex]" alt="Imagem principal" />
             }
 
             @else {
@@ -52,33 +52,18 @@
           </figure>
 
           <div class="thumbnail-list">
-            @if (isCreation) {
-              @for (image of imageBase64; track $index) {
-                <div class="thumbnail-wrapper">
-                  <img
-                    [src]="image"
-                    [class.selected]="$index === selectedImageIndex"
-                    (click)="setMainImage($index)"
-                    class="thumbnail"
-                  />
-                  <button class="delete-btn" (click)="removeNewImage($index)" type="button">×</button>
-                </div>
-              }
+            @for (image of imageBase64; track $index) {
+              <div class="thumbnail-wrapper">
+                <img
+                  [src]="image"
+                  [class.selected]="$index === selectedImageIndex"
+                  (click)="setMainImage($index)"
+                  class="thumbnail"
+                />
+                <button class="delete-btn" (click)="removeNewImage($index)" type="button">×</button>
+              </div>
             }
 
-            @else {
-              @for (url of imageUrls; track $index) {
-                <div class="thumbnail-wrapper">
-                  <img
-                    [src]="url"
-                    [class.selected]="$index === selectedImageIndex"
-                    (click)="setMainImage($index)"
-                    class="thumbnail"
-                  />
-                  <button class="delete-btn" (click)="removeExistingImage($index)" type="button">×</button>
-                </div>
-              }
-            }
             <figure class="thumbnail add-thumbnail">
               <img src="camera.jpg" (click)="fileInput.click()" />
               <input
